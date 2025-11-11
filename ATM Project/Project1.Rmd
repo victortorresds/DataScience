@@ -1,0 +1,896 @@
+---
+title: "Project 1"
+author: "Victor Torres"
+date: "2024-10-25"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This project consists of 3 parts - two required and one bonus and is worth 15% of your grade.  The project is due at 11:59 PM on Sunday Apr 11.  I will accept late submissions with a penalty until the meetup after that when we review some projects.
+
+## Parts {.tabset .tabset-fade .tabset-pills}
+
+### Libraries
+
+```{r libraries}
+library(readxl)
+library(fpp3)
+library(tidyverse)
+library(gridExtra)
+library(forecast)
+library(dplyr)
+library(lubridate)
+library(tsibble)
+library(tseries)
+library(zoo)
+library(xlsx)
+```
+
+### Part A
+
+ I want you to forecast how much cash is taken out of 4 different ATM machines for May 2010.  The data is given in a single file.  The variable ‘Cash’ is provided in hundreds of dollars, other than that it is straight forward.   I am being somewhat ambiguous on purpose to make this have a little more business feeling.  Explain and demonstrate your process, techniques used and not used, and your actual forecast.  I am giving you data via an excel file, please provide your written report on your findings, visuals, discussion and your R code via an RPubs link along with the actual.rmd file  Also please submit the forecast which you will put in an Excel readable file.
+
+```{r readATM}
+# Read Excel file into R
+ATM_Data <- read_excel("C:/Users/vitug/OneDrive/Desktop/CUNY Masters/DATA_624/ATM624Data.xlsx")
+head(ATM_Data)
+str(ATM_Data)
+```
+
+```{r date}
+# Converting DATE column format from numeric to date (YYYY-MM-DD).
+ATM_Data$DATE <- as.Date(ATM_Data$DATE, origin = "1899-12-30") 
+# convert to tsibble
+ATM_Data <-as_tsibble(ATM_Data, key = ATM, index = DATE)
+# Summary of the converted data
+summary(ATM_Data)
+```
+
+```{r}
+# check NA values in columns
+ATM_Data %>%
+  filter(is.na(Cash))
+```
+
+```{r}
+#remove data with blank ATM information
+ATM_Data <- ATM_Data[!is.na(ATM_Data$ATM),]
+
+#view remaining missing data
+ATM_Data %>%
+  filter(is.na(Cash))
+```
+
+```{r}
+# use na.approx to fill missing values
+ATM_Data <- ATM_Data%>%
+  mutate(Cash = na.approx(Cash))
+
+#view the rows to confirm missing values
+ATM_Data[c(44,47,49,53,55),]
+```
+
+#### Time Series
+ATM data seems to have duplicate values when I used the summarize function to find missing values on it. The data seems to have seasonality which is not consistent. I decided to used a STL decomposition based on the data s behavior. The next step was to split up the data into training and testing for the forecast. I decided to apply ETS model to determine if the data has white noise before running the forecast. Also, I applied the ARIMA model to check if the data is stationary or not,after running several models, the ETS model has the lowest RMSE, which it might be the best option for this dataset.
+
+
+```{r}
+#time series plot
+ATM_Data %>% ggplot(aes(x = DATE, y = Cash, col = ATM)) +
+    geom_line(show.legend = FALSE) +
+    facet_wrap(~ ATM, ncol = 1, scales = "free_y") +
+    labs(title = "Daily Cash Withdrawn of ATM's ", x = "Date") +
+    scale_y_continuous("100's")
+```
+
+```{r}
+# Time Series Graph by ATM
+ggplot(ATM_Data, aes(x = DATE, y = Cash, color = ATM)) +
+  geom_line() +
+  labs(title = "ATM Cash Withdrawals", x = "Date", y = "Cash") +
+  theme_minimal()
+```
+
+#### ATM Models {.tabset .tabset-fade .tabset-pills}
+
+##### ATM1
+
+```{r}
+# ATM 1
+ATM_Data %>% 
+  filter(ATM == 'ATM1') %>%
+  autoplot(Cash) +
+  labs(title = "ATM1 Cash withdrawal",x = "Month", y = "Cash Withdrawal")
+```
+
+```{r}
+# Filter for ATM1 data and sum up the totals in the Cash column 
+ATM_1 <- ATM_Data %>%
+  filter(ATM == 'ATM1') %>%
+  summarise(ATM,Cash = sum(Cash))
+```
+
+```{r}
+ATM_1 %>%
+  model(STL(Cash ~ trend() + season(window = "periodic"))) %>%
+  components() %>%
+    autoplot()
+```
+
+```{r}
+#splitting the data for train and test
+train <- ATM_1 %>%
+  filter(DATE <= as_date('2010-03-31'))
+
+test <- ATM_1 %>%
+  filter(DATE > as_date('2010-03-31'))
+```
+
+```{r}
+# fit for ETS model
+ets_fit <- train %>%
+  model(ETS(Cash))
+
+# report ETS model
+report(ets_fit)
+```
+
+```{r}
+#residuals
+gg_tsresiduals(ets_fit)
+```
+
+```{r}
+#Ljung box test to confirm if the data is white noise. White noise since p-value is over .05
+ets_fit %>%
+  augment() %>%
+  features(.resid, ljung_box, lag = 24)
+```
+
+```{r}
+# Box Pierce test - no significant autocorrelation
+ets_fit %>%
+  augment() %>%
+    features(.innov, box_pierce, lag = 24)
+```
+
+```{r}
+# ETS forecast
+ets_fc <- ets_fit %>%
+  forecast(h = '2 month')
+
+#plot ets forecast
+ets_fc %>%
+  autoplot(train) +
+  labs(title = "Forecast for ETS model ATM1")
+```
+
+```{r}
+# Export forecast to Excel
+fc1_data <- as.data.frame(ets_fc)
+write.xlsx(fc1_data, "Forecast_ATM1_FC.xlsx")
+```
+
+```{r}
+# fit for ARIMA model 
+arima_fit <- train %>%
+  model(ARIMA(Cash))
+
+#report on ARIMA model
+report(arima_fit)
+```
+
+```{r}
+# residuals
+gg_tsresiduals(arima_fit)
+```
+
+```{r}
+# Augmented Dickey-Fuller - p-value less than .05 therefore it is stationary
+adf_test <- adf.test(train$Cash)
+print(adf_test)
+```
+
+```{r}
+#Data is stationary so I can apply Arima model
+# ARIMA forecast
+arima_fc <- arima_fit %>%
+  forecast(h ='2 month')
+
+#plot ARIMA forecast
+arima_fc %>%
+  autoplot(train) +
+  labs(title = "Forecast for ARIMA model ATM1")
+```
+
+```{r}
+# display Arima values
+accuracy(arima_fc, test)
+```
+
+```{r}
+# display ets values
+accuracy(ets_fc, test)
+```
+
+```{r}
+#apply lambda
+lambda <- train %>%
+  features(Cash, features = guerrero) %>%
+  pull(lambda_guerrero)
+
+#box cox transformation fit
+model_fit <- train %>%
+  model(
+    NAIVE = NAIVE(box_cox(Cash, lambda)),
+    SNAIVE = SNAIVE(box_cox(Cash, lambda)),
+    MEAN = MEAN(box_cox(Cash, lambda)),
+    RW = RW(box_cox(Cash, lambda) ~ drift())
+  )
+
+# augment model residuals
+augmented_residuals <- model_fit %>%
+  augment()
+
+# Plot residuals over time for each model
+augmented_residuals %>%
+  ggplot(aes(x = DATE, y = .resid)) +
+  geom_line() +
+  facet_wrap(~ .model, scales = "free") +
+  labs(title = "Residuals over time",
+       x = "Time",
+       y = "Residuals")
+```
+
+```{r}
+model_fc <- model_fit %>%
+  forecast(h = '2 month')
+
+model_fc %>%
+  autoplot(train, level = NULL) +
+  labs(title = "NAIVE, SNAIVE, MEAN and RW Models",  y = 'hundreds') +
+  guides(colour = guide_legend(title = "Models"))
+```
+
+```{r}
+#accuracy on model - lowest MAE, RMSE or MAPE
+accuracy(model_fc, test)
+```
+
+##### ATM2
+
+ATM2 Data Idecided to check if there is white noise on it to run an ETS model. After reviewing the dataset, I did not find white noise, even after conducting the box-cox transformation the p-value is less than .05. The use of the ETS model is not recommend ti for this data. I ran the ARIMA model and with the ADF test with less than .05, I can tell that the data is stationary to run the forecast. Overall the best model to use for this data is using the ARIMA model.
+
+```{r}
+ATM_Data %>%
+  filter(ATM == 'ATM2') %>%
+  autoplot(Cash) +
+  labs(title = "ATM2 Cash withdrawal",x = "Month", y = "Cash Withdrawal")
+```
+
+```{r}
+ATM_2 <- ATM_Data %>%
+  filter(ATM == 'ATM2') %>%
+  summarise(ATM,Cash = sum(Cash))
+```
+
+```{r}
+ATM_2 %>%
+  model(STL(Cash ~ trend() + season(window = "periodic"))) %>%
+  components() %>%
+    autoplot()
+```
+
+```{r}
+#splitting the data
+train2 <- ATM_2 %>%
+  filter(DATE <= as_date('2010-03-31'))
+
+test2 <- ATM_2 %>%
+  filter(DATE > as_date('2010-03-31'))
+```
+
+```{r}
+# fit for ETS model
+ets_fit2 <- train2 %>%
+  model(ETS(Cash))
+
+# report ETS model
+report(ets_fit2)
+```
+
+```{r}
+#residuals
+gg_tsresiduals(ets_fit2)
+```
+
+```{r}
+#Ljung box test- p-value is less than .05
+ets_fit2 %>%
+  augment() %>%
+  features(.resid, ljung_box, lag = 24)
+```
+
+```{r}
+# Box-Cox Transformation
+lambda2 <- train2 %>%
+  features(Cash, features = guerrero) %>%
+  pull(lambda_guerrero)
+
+# fit for ETS model with box_cox transformation
+ets_fit2 <- train2 %>%
+  model(ETS(box_cox(Cash, lambda2)))
+
+#residuals
+gg_tsresiduals(ets_fit2)
+```
+
+```{r}
+#Ljung box test- p-value below .05 but better than previously 
+ets_fit2 %>%
+  augment() %>%
+  features(.resid, ljung_box, lag = 24)
+```
+
+```{r}
+# fit for ARIMA model 
+arima_fit2 <- train2 %>%
+  model(ARIMA(Cash))
+
+#report on ARIMA model
+report(arima_fit2)
+```
+
+```{r}
+# residuals
+gg_tsresiduals(arima_fit2)
+```
+
+```{r}
+adf_test2 <- adf.test(train2$Cash)
+```
+
+```{r}
+print(adf_test2)
+```
+
+```{r}
+# ARIMA forecast
+arima_fc2 <- arima_fit2 %>%
+  forecast(h ='2 month')
+
+#plot ARIMA forecast
+arima_fc2 %>%
+  autoplot(train2) +
+  labs(title = "Forecast for ARIMA model ATM2")
+```
+
+```{r}
+# Export forecast to Excel
+fc2_data <- as.data.frame(arima_fc2)
+write.xlsx(fc2_data, "Forecast_ATM2_FC.xlsx")
+```
+
+```{r}
+# display Arima Values
+accuracy(arima_fc2, test2)
+```
+
+```{r}
+#plot to compare between models
+model_fit2 <- train2 %>%
+  model(
+    NAIVE = NAIVE(box_cox(Cash, lambda2)),
+    SNAIVE = SNAIVE(box_cox(Cash, lambda2)),
+    MEAN = MEAN(box_cox(Cash, lambda2)),
+    RW = RW(box_cox(Cash, lambda2) ~ drift())
+  )
+
+model_fc2 <- model_fit2 %>%
+  forecast(h = '2 month')
+
+model_fc2 %>%
+  autoplot(train2, level = NULL) +
+  labs(title = "NAIVE, SNAIVE, MEAN and RW Models",  y = 'Cash Withdrawals hundreds') +
+  guides(colour = guide_legend(title = "Models"))
+```
+
+```{r}
+#accuracy on model - lowest MAE, RMSE or MAPE
+accuracy(model_fc2, test2)
+```
+
+##### ATM3
+
+The data for ATM3 is mostly with zero values, only a few data in April was available to work with. I decided that the best forecast is the seasonal naive based on the charts without splitting up the data for test and train .Splitting up the data for train data prior to April would not provide much insight as the forecast would just be zero and can not predict that the number would increase after March.
+
+```{r}
+ATM_Data %>%
+  filter(ATM == 'ATM3') %>%
+  autoplot(Cash) +
+  labs(title = "ATM3 Cash withdrawal",x = "Month", y = "Cash Withdrawal")
+```
+
+```{r}
+ATM_3 <- ATM_Data %>%
+  filter(ATM == 'ATM3') %>%
+  summarise(ATM,Cash = sum(Cash))
+```
+
+```{r}
+ATM_3 %>%
+  model(STL(Cash ~ trend() + season(window = "periodic"))) %>%
+  components() %>%
+    autoplot()
+```
+
+```{r}
+#splitting the data
+train3 <- ATM_3 %>%
+  filter(DATE <= as_date('2010-03-31'))
+
+test3 <- ATM_3 %>%
+  filter(DATE > as_date('2010-03-31'))
+```
+
+```{r}
+# fit for ETS model
+ets_fit3 <- train3 %>%
+  model(ETS(Cash))
+
+# report ETS model
+report(ets_fit3)
+```
+
+```{r}
+#residuals
+gg_tsresiduals(ets_fit3)
+```
+
+```{r}
+#Ljung box test- White noise or not
+ets_fit3 %>%
+  augment() %>%
+  features(.resid, ljung_box, lag = 24)
+```
+
+```{r}
+# ETS forecast
+ets_fc3 <- ets_fit3 %>%
+  forecast(h = '2 month')
+
+#plot ets forecast
+ets_fc3 %>%
+  autoplot(train3) +
+  labs(title = "Forecast for ETS model ATM3")
+```
+
+```{r}
+# fit for ARIMA model 
+arima_fit3 <- train3 %>%
+  model(ARIMA(Cash))
+
+#report on ARIMA model
+report(arima_fit3)
+```
+
+```{r}
+# residuals
+gg_tsresiduals(arima_fit3)
+```
+
+```{r}
+# Augmented Dickey-Fuller 
+adf_test3 <- adf.test(train3$Cash)
+print(adf_test3)
+```
+
+```{r}
+# ARIMA forecast
+arima_fc3 <- arima_fit3 %>%
+  forecast(h ='2 month')
+
+#plot ARIMA forecast
+arima_fc3 %>%
+  autoplot(train3) +
+  labs(title = "Forecast for ARIMA model ATM3")
+```
+
+```{r}
+# Export forecast to Excel
+fc3_data <- as.data.frame(arima_fc3)
+write.xlsx(fc3_data, "Forecast_ATM3_FC.xlsx")
+```
+
+```{r}
+# Accuracy of ARIMA forecast - MAE and RMSE
+accuracy(arima_fc3, test3)
+```
+
+```{r}
+# plot to compare between models
+model_fit3 <- train3 %>%
+  model(
+    NAIVE = NAIVE(Cash),
+    SNAIVE = SNAIVE(Cash),
+    MEAN = MEAN(Cash),
+    RW = RW(Cash ~ drift())
+  )
+
+model_fc3 <- model_fit3 %>%
+  forecast(h = '2 month')
+
+model_fc3 %>%
+  autoplot(ATM_3, level = NULL) +
+  labs(title = "NAIVE, SNAIVE, MEAN and RW Models",  y = 'Cash Withdrawals hundreds') +
+  guides(colour = guide_legend(title = "Models"))
+```
+
+```{r}
+#accuracy on model - lowest MAE, RMSE or MAPE
+accuracy(model_fc3, test3)
+```
+
+```{r}
+# run forecast model without splitting data
+ATM_3 %>%
+  model(
+    ETS(Cash),
+    ARIMA(Cash),
+    NAIVE = NAIVE(Cash),
+    SNAIVE = SNAIVE(Cash),
+    MEAN = MEAN(Cash),
+    RW = RW(Cash ~ drift())
+        )  %>%
+  forecast(h = '2 month') %>%
+  autoplot(ATM_3, level = NULL) +
+labs(title = "ATM3 forecast model")
+```
+
+##### ATM4
+
+For the ATM4 data, I decided to use a ETS model to see if the data has white noise on it, before running the forecast. The ARIMA model was applied to find out if the data is stationary or not. After comparing between models, I decided to use the Random Walk model since it has the best RMSE compared to all the different models.
+
+```{r}
+ATM_Data %>%
+  filter(ATM == 'ATM4') %>%
+  autoplot(Cash) +
+  labs(title = "ATM4 Cash withdrawal",x = "Month", y = "Cash Withdrawal")
+```
+
+```{r}
+ATM_4 <- ATM_Data %>%
+  filter(ATM == 'ATM4') %>%
+  summarise(ATM,Cash = sum(Cash))
+```
+
+```{r}
+ATM_4 %>%
+  model(STL(Cash ~ trend() + season(window = "periodic"))) %>%
+  components() %>%
+    autoplot()
+```
+
+```{r}
+#splitting the data
+train4 <- ATM_4 %>%
+  filter(DATE <= as_date('2010-03-31'))
+
+test4 <- ATM_4 %>%
+  filter(DATE > as_date('2010-03-31'))
+```
+
+```{r}
+# fit for ETS model
+ets_fit4 <- train4 %>%
+  model(ETS(Cash))
+
+# report ETS model
+report(ets_fit4)
+```
+
+```{r}
+#residuals
+gg_tsresiduals(ets_fit4)
+```
+
+```{r}
+#Ljung box test- White noise or not
+ets_fit4 %>%
+  augment() %>%
+  features(.resid, ljung_box, lag = 24)
+```
+
+```{r}
+# ETS forecast
+ets_fc4 <- ets_fit4 %>%
+  forecast(h = '2 month')
+
+#plot ets forecast
+ets_fc4 %>%
+  autoplot(train4) +
+  labs(title = "Forecast for ETS model ATM4")
+```
+
+```{r}
+# fit for ARIMA model 
+arima_fit4 <- train4 %>%
+  model(ARIMA(Cash))
+
+#report on ARIMA model
+report(arima_fit4)
+```
+
+```{r}
+# residuals
+gg_tsresiduals(arima_fit4)
+```
+
+```{r}
+# Augmented Dickey-Fuller 
+adf_test4 <- adf.test(train4$Cash)
+print(adf_test4)
+```
+
+```{r}
+# ARIMA forecast
+arima_fc4 <- arima_fit4 %>%
+  forecast(h ='2 month')
+
+#plot ARIMA forecast
+arima_fc4 %>%
+  autoplot(train4) +
+  labs(title = "Forecast for ARIMA model ATM4")
+```
+
+```{r}
+# Accuracy of ARIMA forecast - MAE and RMSE
+accuracy(arima_fc4, test4)
+```
+
+```{r}
+# Accuracy of ETS forecast - MAE and RMSE
+accuracy(ets_fc4, test4)
+```
+
+```{r}
+model_fit4 <- train4 %>%
+  model(
+    NAIVE = NAIVE(Cash),
+    SNAIVE = SNAIVE(Cash),
+    MEAN = MEAN(Cash),
+    RW = RW(Cash ~ drift())
+  )
+
+model_fc4 <- model_fit4 %>%
+  forecast(h = '2 month')
+
+model_fc4 %>%
+  autoplot(train4, level = NULL) +
+  labs(title = "NAIVE, SNAIVE, MEAN and RW Models",  y = 'Cash Withdrawals hundreds') +
+  guides(colour = guide_legend(title = "Models"))
+```
+
+```{r}
+#accuracy on model - lowest MAE, RMSE or MAPE
+accuracy(model_fc4, test4)
+```
+
+```{r}
+# Export forecast to Excel
+fc4_data <- as.data.frame(model_fc4) %>%
+  filter(.model == "SNAIVE")
+write.xlsx(fc4_data, "Forecast_ATM4_FC.xlsx")
+```
+
+### Part B
+
+Part B consists of a simple dataset of residential power usage for January 1998 until December 2013.  Your assignment is to model these data and a monthly forecast for 2014.  The data is given in a single file.  The variable ‘KWH’ is power consumption in Kilowatt hours, the rest is straight forward. Add this to your existing files above. 
+
+```{r}
+# import data to R 
+power_usage <- read_excel("C:/Users/vitug/OneDrive/Desktop/CUNY Masters/DATA_624/ResidentialCustomerForecastLoad-624.xlsx")
+head(power_usage)
+str(power_usage)
+```
+
+```{r}
+#convert the date column from character to date
+power_usage <- power_usage %>%
+  mutate(date = ym(`YYYY-MMM`)) %>%
+  select(-`YYYY-MMM`)
+
+power_usage
+```
+
+```{r}
+# convert to tsibble
+power <- power_usage %>%
+  mutate(date = yearmonth(date)) %>%
+  as_tsibble(index = date)
+
+# plot the KWH column
+power %>%
+  autoplot(KWH) +
+  labs(title = " KWH ")
+```
+
+```{r}
+# summary data for missing values
+summary(power_usage)
+
+```
+
+```{r}
+#view missing data
+power %>%
+  filter(is.na(KWH))
+
+```
+
+```{r}
+# use na.approx to deal with the missing values
+power2 <- power %>%
+  mutate(KWH = na.approx(KWH))
+
+# display column to make sure missing value it's been fulfilled
+power2[129,]
+```
+
+```{r}
+# plot the KWH column with new values
+power2 %>%
+  autoplot(KWH) +
+  labs(title = " KWH ")
+
+```
+
+```{r}
+### Part B {.tabset} 
+```
+
+
+Part B has less missing values on the dataset, there were only one column containing missing data, I used the same technique that I used in part one to fill missing values (na.appox). I split data into training and testing. I conducted a box-pierce test to see if the ETS model contained white noise on it before conducting forecasting. I applied the Arima model. I checked the data using SDF to see if the data was stationary,I used a box cox transformation on the data and differencing to forecast the data. I came up with the conclusion that the ETS forecasting is a better fit for this data set than the Arima model.
+
+#### Split data for testing and training
+
+```{r}
+#splitting the data
+train_power <- power2 %>%
+  filter(date <= yearmonth('2012 Dec'))
+
+test_power <- power2 %>%
+  filter(date > yearmonth('2012 Dec'))
+```
+
+#### ETS Model
+
+```{r}
+# fit ETS model 
+ets_powerfit <- train_power %>%
+  model(ETS(KWH))
+
+# report ETS model
+report(ets_powerfit)
+```
+
+```{r}
+#residuals
+gg_tsresiduals(ets_powerfit)
+```
+
+```{r}
+#Ljung box test- White noise since p-value is over .05
+ets_powerfit %>%
+  augment() %>%
+  features(.resid, ljung_box, lag = 24)
+```
+
+```{r}
+# Box Pierce test - no significant autocorrelation
+ets_powerfit %>%
+  augment() %>%
+    features(.innov, box_pierce, lag = 24)
+```
+
+#### Forecast ETS Model
+
+```{r}
+#forecast ETS model
+ets_powerfc <- ets_powerfit %>%
+  forecast(h = '12 month')
+
+# plot the forecast
+ets_powerfc %>%
+  autoplot(power2) +
+  labs(title = "ETS forecast for 2014", y = 'KWH', x = 'date')
+```
+
+```{r}
+# Accuracy of ETS forecast - MAE and RMSE
+accuracy(ets_powerfc, test_power)
+```
+
+```{r}
+# Export forecast to Excel
+fc5_data <- as.data.frame(ets_powerfc)
+write.xlsx(fc5_data, "Forecast_Power_FC.xlsx")
+```
+
+#### Arima Model
+
+```{r}
+# fit for ARIMA model 
+arima_powerfit <- train_power %>%
+  model(ARIMA(KWH))
+
+#report on ARIMA model
+report(arima_powerfit)
+```
+
+```{r}
+# residuals
+gg_tsresiduals(arima_powerfit)
+```
+
+```{r}
+# Augmented Dickey-Fuller 
+adf_testpow <- adf.test(train_power$KWH)
+print(adf_testpow)
+```
+
+#### Lambda and Box-Cox transformation
+
+```{r}
+#lambda
+lambda <- power2 %>%
+  features(KWH, features = guerrero) %>%
+  pull(lambda_guerrero)
+
+#box-cox transformation
+power2 %>%
+  features(box_cox(KWH,lambda), unitroot_ndiffs)
+```
+
+```{r}
+#display ACF and PACF with box_cox transformation and difference
+power2 %>%
+  gg_tsdisplay(difference(box_cox(KWH, lambda)), plot_type = 'partial') +
+  labs(title = paste("Box-Cox transformation and differencing for Monthly KWH = ", round(lambda, 2)))
+```
+
+```{r}
+#fit model
+power_fit <- power2 %>%
+  model (
+    ARIMA(box_cox(KWH,lambda)),
+    arima111 = ARIMA(box_cox(KWH,lambda) ~ pdq(1,1,1)),
+   arima210 = ARIMA(box_cox(KWH,lambda) ~ pdq(2,1,0)),
+   arima202 = ARIMA(box_cox(KWH,lambda) ~ pdq(2,0,2))
+    )
+```
+
+```{r}
+report(power_fit)
+```
+
+```{r}
+glance(power_fit) %>% arrange(AICc)
+```
+
+```{r}
+#forecast
+arima_fcpow <-  power2 %>%
+  model (ARIMA(box_cox(KWH,lambda)))%>%
+  forecast(h = "12 months")
+
+# Plot the forecast
+arima_fcpow %>%
+  autoplot(power2) +
+  labs(title = "Forecast for ARIMA Model for KWH")
+```

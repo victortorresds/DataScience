@@ -1,0 +1,329 @@
+---
+title: "Homework10"
+author: "Victor Torres"
+date: "2024-11-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Instructions
+Imagine 10000 receipts sitting on your table. Each receipt represents a transaction with items that were purchased. The receipt is a representation of stuff that went into a customer’s basket - and therefore ‘Market Basket Analysis’.
+
+That is exactly what the Groceries Data Set contains: a collection of receipts with each line representing 1 receipt and the items purchased. Each line is called a transaction and each column in a row represents an item.  The data set is attached.
+
+Your assignment is to use R to mine the data for association rules. You should report support, confidence and lift and your top 10 rules by lift. 
+
+Extra credit: do a simple cluster analysis on the data as well.  Use whichever packages you like.  
+
+#### Load Libraries for this Project.
+
+```{r warning=FALSE,message=FALSE}
+library(tidyverse)
+library(arules)
+library(arulesViz)
+library(visNetwork)
+library(igraph)
+```
+
+# Methods {.tabset .tabset-fade .tabset-pills}
+
+## A: Use R to mine the data for association rules
+
+### Sections {.tabset .tabset-fade .tabset-pills}
+
+#### Load DataFrame as "transaction data" to use arules library
+
+```{r}
+grocerydf <- read.transactions("C:/Users/vitug/OneDrive/Desktop/CUNY Masters/DATA_624/GroceryDataSet.csv", format = "basket", sep=",")
+
+summary(grocerydf)
+```
+
+#### Plot top10 items using "itemFrequencyPlot" function.
+
+```{r}
+itemFrequencyPlot(grocerydf, topN=10, type="absolute", main="Top 10 Items")
+```
+
+After plotting the list of transacctions, I can clearly see that whole milk, other vegetables, rolls/buns and soda were at top of purchased items based on item frequency.
+
+#### Use the Apriori algorithm to find frequent itemsets
+
+```{r}
+frequent_itemsets <- apriori(grocerydf, parameter = list(supp = 0.01, conf = 0.5))  
+# Inspect the frequent itemsets
+inspect(frequent_itemsets)
+
+```
+
+#### Generate asociation rules 
+
+```{r}
+rules <- apriori(grocerydf, parameter = list(supp = 0.01, conf = 0.5))
+# Inspect the rules
+inspect(rules)
+```
+
+#### Inspect top10 rules using "lift" function
+
+```{r}
+inspect(sort(rules, by = "lift")[1:10])
+```
+#### Find number of rules using "summary" function.
+
+```{r}
+summary(rules)
+```
+
+
+#### Graph of top10 rules by "lift" using IGraph
+
+```{r}
+plot(rules,by = "lift", method="graph", engine = "igraph", layout = igraph::in_circle(), limit = 10)
+```
+
+The plot above shows that the top 10 frequently purchased items are whole milk, other vegetables, rolls/buns, soda, yogurt,etc. The Apriori functions returns 15 association rules for the transaction data. After inspecting the top 10 rules by confidence shows that most of the associations are with "other vegetables" These relationships are pictured above in the plot of the network where most arrows are pointing toward whole milk and other vegetables categories.
+
+## B: Perform a Market Basket Analysis
+
+### Sections {.tabset .tabset-fade .tabset-pills}
+
+#### Create a co-occurrence matrix from the transaction data
+
+```{r}
+co_occurrence_matrix <- crossTable(grocerydf)
+
+# Convert the co-occurrence matrix to a graph
+g <- graph.adjacency(co_occurrence_matrix, mode = "undirected", weighted = TRUE)
+
+# Inspect the graph
+summary(g)
+```
+
+#### Create a graph displaying the top 10 items(nodes) in the network
+
+```{r}
+# Function to plot the top 10 items (nodes) based on degree centrality
+plot_top_items_network <- function(g, top_n = 10, layout_type = "fr", transparency = 0.5) {
+  
+  # Calculate degree centrality for each node
+  importance_scores <- degree(g)
+  
+  # Get the top10 nodes based on degree
+  top_nodes <- order(importance_scores, decreasing = TRUE)[1:top_n]
+  
+  # Create a sub graph for the top10 nodes
+  top_subgraph <- induced_subgraph(g, top_nodes)
+  
+  # Use specified layout type for the network
+  if (layout_type == "fr") {
+    layout_fr <- layout_with_fr(top_subgraph)  # Fruchterman-Reingold layout
+  } else if (layout_type == "kk") {
+    layout_fr <- layout_with_kk(top_subgraph)  # Kamada-Kawai layout
+  } else {
+    layout_fr <- layout_in_circle(top_subgraph)  # Circle layout as fallback
+  }
+  
+  # Plot the top10 items (nodes)
+  plot(top_subgraph,
+       layout = layout_fr,
+       vertex.size = 20,               # Size of nodes
+       vertex.label.cex = 0.8,         # Size of labels
+       vertex.color = "lightblue",     # Color for all nodes
+       vertex.frame.color = "white",   # White frame around nodes
+       edge.width = E(top_subgraph)$weight / 10,  # Width of edges
+       edge.color = adjustcolor("gray", alpha.f = transparency), # Transparent edges
+       edge.arrow.size = 1.5,          # Size of edge arrows
+       main = paste("Top", top_n, "Items in Network"),
+       vertex.label.color = "black",   # Label color
+       vertex.label.dist = 1,          # Label distance from node
+       edge.curved = 0.2)              # Curved edges
+}
+
+plot_top_items_network(g, top_n = 10, layout_type = "fr", transparency = 0.3)
+```
+
+Based on the graph above, whole milk and yogurt has a direct relationship as well as other vegetables and roll-buns, shopping bags, pastry and butter are more independent items in the top10 network.
+
+#### Create a communtity detection using the "Louvain method"
+
+```{r}
+communities <- cluster_louvain(g)
+
+membership(communities)
+```
+
+#### Create a Plot with the top3 communities with its items
+
+```{r}
+# Function to plot the top 10 communities in the network
+plot_top_communities_network <- function(g, top_n = 3, layout_type = "fr", transparency = 0.5) {
+  
+  # Perform community detection using the Louvain method
+  communities <- cluster_louvain(g)
+  
+  # Get community membership (which community each node belongs to)
+  community_membership <- membership(communities)
+  
+  # Identify the top N communities based on size (number of nodes)
+  community_sizes <- table(community_membership)
+  top_communities <- order(community_sizes, decreasing = TRUE)[1:top_n]
+  
+  # Create a subgraph that includes only the nodes in the top N communities
+  nodes_in_top_communities <- which(community_membership %in% top_communities)
+  top_community_subgraph <- induced_subgraph(g, nodes_in_top_communities)
+  
+  # Use specified layout type for the network
+  if (layout_type == "fr") {
+    layout_fr <- layout_with_fr(top_community_subgraph)  # Fruchterman-Reingold layout
+  } else if (layout_type == "kk") {
+    layout_fr <- layout_with_kk(top_community_subgraph)  # Kamada-Kawai layout
+  } else {
+    layout_fr <- layout_in_circle(top_community_subgraph)  # Circle layout as fallback
+  }
+  
+  # Plot the network of the top N communities
+  plot(top_community_subgraph,
+       layout = layout_fr,
+       vertex.size = 10,               # Size of nodes
+       vertex.label.cex = 0.8,         # Size of labels
+       vertex.color = community_membership[nodes_in_top_communities] + 1,  # Color by community
+       vertex.frame.color = "white",   # White frame around nodes
+       edge.width = E(top_community_subgraph)$weight / 10,  # Width of edges
+       edge.color = adjustcolor("gray", alpha.f = transparency), # Transparent edges
+       edge.arrow.size = 0.5,          # Size of edge arrows
+       main = paste("Top", top_n, "Communities in Network"),
+       vertex.label.color = "black",   # Label color
+       vertex.label.dist = 1,          # Label distance from node
+       edge.curved = 0.3)              # Curved edges
+}
+# Plot the top 10 communities in the network
+plot_top_communities_network(g, top_n = 3, layout_type = "fr", transparency = 0.5)
+```
+
+The table show 25 communities in the data, with community number 3 containing the majority of items(candy, chocolate, chocolate marshmallows, baby cosmetics, waffles,specialty chocolate, etc). The graph show baby food, baby cosmetics, and cream within communities but more independent.
+
+#### Create a Plot to display, top5 communities and items(nodes)
+
+```{r}
+# Function to plot top items and top communities together
+plot_top_items_and_communities <- function(g, top_items_n = 5, top_communities_n = 5, layout_type = "fr", transparency = 0.5) {
+  
+  # Calculate degree centrality for each node (for top items)
+  importance_scores <- degree(g)
+  top_items <- order(importance_scores, decreasing = TRUE)[1:top_items_n]
+  
+  # Perform community detection
+  communities <- cluster_louvain(g)
+  community_membership <- membership(communities)
+  
+  # Get community sizes and top N communities based on size
+  community_sizes <- table(community_membership)
+  top_communities <- order(community_sizes, decreasing = TRUE)[1:top_communities_n]
+  
+  # Subgraph for top items
+  top_items_subgraph <- induced_subgraph(g, top_items)
+  
+  # Subgraph for top communities
+  nodes_in_top_communities <- which(community_membership %in% top_communities)
+  top_communities_subgraph <- induced_subgraph(g, nodes_in_top_communities)
+  
+  # Combine the two subgraphs (top items and top communities)
+  combined_subgraph <- union(top_items_subgraph, top_communities_subgraph)
+  
+  # Plot combined subgraph
+  layout_fr <- layout_with_fr(combined_subgraph)
+  plot(combined_subgraph,
+       layout = layout_fr,
+       vertex.size = 10,               # Size of nodes
+       vertex.label.cex = 0.8,         # Size of labels
+       vertex.color = community_membership[nodes_in_top_communities] + 1,  # Color by community
+       vertex.frame.color = "white",   # White frame around nodes
+       edge.width = E(combined_subgraph)$weight / 10,  # Width of edges
+       edge.color = adjustcolor("gray", alpha.f = transparency), # Transparent edges
+       edge.arrow.size = 0.7,          # Size of edge arrows
+       main = paste("Top Items and Top Communities"),
+       vertex.label.color = "black",   # Label color
+       vertex.label.dist = 1,          # Label distance from node
+       edge.curved = 0.3)              # Curved edges
+}
+# Plot the top 10 items and the top 10 communities together
+plot_top_items_and_communities(g, top_items_n = 5, top_communities_n = 5, layout_type = "fr", transparency = 0.5)
+
+```
+
+The graph above is a bit messy, however, we can see items that are more independent such as soda,whole milk, bun-rolls.
+
+#### Create a function to analysis of top10 items based on degree and centrality
+
+```{r}
+# Function to plot the top N most important items in the network
+plot_top_items_network <- function(g, criterion = "degree", top_n = 10, layout_type = "fr", transparency = 0.3) {
+  
+  # Check criterion and calculate corresponding values (degree, betweenness, etc.)
+  if (criterion == "degree") {
+    importance_scores <- degree(g)
+  } else if (criterion == "betweenness") {
+    importance_scores <- betweenness(g)
+  } else if (criterion == "closeness") {
+    importance_scores <- closeness(g)
+  } else {
+    stop("Unknown criterion. Please choose 'degree', 'betweenness', or 'closeness'.")
+  }
+  
+  # Get the top N nodes based on the selected criterion
+  top_nodes <- order(importance_scores, decreasing = TRUE)[1:top_n]
+  
+  # Create a subgraph for the top N nodes
+  top_subgraph <- induced_subgraph(g, top_nodes)
+  
+  # Perform community detection on the subgraph
+  communities_subgraph <- cluster_louvain(top_subgraph)
+  
+  # Use specified layout type for the subgraph
+  if (layout_type == "fr") {
+    layout_fr <- layout_with_fr(top_subgraph)  # Fruchterman-Reingold layout
+  } else if (layout_type == "kk") {
+    layout_fr <- layout_with_kk(top_subgraph)  # Kamada-Kawai layout
+  } else {
+    layout_fr <- layout_in_circle(top_subgraph)  # Circle layout as fallback
+  }
+  
+  # Plot the network with selected settings
+  plot(top_subgraph,
+       layout = layout_fr,
+       vertex.size = 10,               # Size of nodes
+       vertex.label.cex = 0.8,         # Size of labels
+       vertex.color = membership(communities_subgraph) + 1,  # Color by community membership
+       vertex.frame.color = "white",   # White frame around nodes
+       edge.width = E(top_subgraph)$weight / 10,    # Width of edges
+       edge.color = adjustcolor("gray", alpha.f = transparency), # Transparent edges
+       edge.arrow.size = 0.5,          # Size of edge arrows
+       main = paste("Top", top_n, "Items by", criterion),
+       vertex.label.color = "black",   # Label color
+       vertex.label.dist = 1,          # Label distance from node
+       edge.curved = 0.2)              # Curved edges
+}
+
+```
+
+#### Graph of top10 items by degree
+
+```{r}
+plot_top_items_network(g, criterion = "degree", top_n = 10, layout_type = "fr", transparency = 0.3)
+
+```
+
+#### Plot of top10 items by betweenness
+
+```{r}
+# Plot the top 10 most central items (based on betweenness centrality)
+plot_top_items_network(g, criterion = "betweenness", top_n = 10, layout_type = "kk", transparency = 0.2)
+
+```
+
+Based on the last analysis, the top items on the list are whole milk and other vegetables, there's a different result when I get the top10 items by betweenness with ready soups as the main item.
+The results varies based on the analysis type, I am really glad that I made this portion of the project, because I just realized that I can use several approaches based on project's needs with market basket analysis. 
