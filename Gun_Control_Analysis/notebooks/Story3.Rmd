@@ -1,0 +1,274 @@
+---
+pdf_document: default
+author: "Victor Torres"
+date: "2024-10-02"
+output:
+  pdf_document: default
+title: "Story 3"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(knitr.graphics.auto_pdf = TRUE)
+```
+
+## Story -3 : Do stricter gun laws reduce firearm gun deaths?
+
+The CDC publishes firearm mortality for each State per 100,000 persons <https://www.cdc.gov/nchs/pressroom/sosmap/firearm_mortality/firearm.htm>. Each State' firearm control laws can be categorized as very strict to very lax. The purpose of this Story is to answer the question, " Do stricter firearm control laws help reduce firearm mortality?"
+
+For this assignment you will need to:
+
+-   Access the firearm mortality data from the CDC using an available API (<https://open.cdc.gov/apis.html>)
+
+-   Create a 5 point Likert scale categorizing gun control laws from most lax to strictest and assign each state to the most appropriate Likert bin.
+
+-   Determine whether stricter gun control laws result in reduced gun violence deaths
+
+-   Present your story using heat maps
+
+### Load libraries required for this project
+
+```{r libraries}
+library(tidyverse)
+library(httr)
+library(jsonlite)
+library(plotly)
+library(rvest)
+```
+
+#### Loading firearm mortality dataset
+
+Data extracted from the CDC website
+
+```{r mortality}
+# Set JSON data URL
+url <- "https://data.cdc.gov/resource/489q-934x.json"
+
+# Use GET request function to get data
+response_data <- GET(url)
+
+# convert URL response to a list
+list_data <- fromJSON(content(response_data, "text", encoding = "UTF-8"))
+
+# Convert list to data frame
+mortality_data <- as.data.frame(list_data)
+
+# display data
+head(mortality_data)
+```
+
+#### Analyze and filter data for this scenario
+
+Filter data to obtain only the necessary columns for this analysis, I'm going to work with the last quarter of last year(2023) for this scenario
+
+```{r data1}
+#Filtering the data 
+mortality_gun <- mortality_data[mortality_data$cause_of_death == "Firearm-related injury" & mortality_data$rate_type == "Crude" & mortality_data$time_period == "12 months ending with quarter", ]
+
+mortality_gun <- data.frame(mortality_gun, row.names = NULL)
+
+#Abbreviate state names
+abbre_state <- c(AL = "alabama", AK = "alaska", AZ = "arizona", AR = "arkansas", CA = "california", CO = "colorado", CT = "connecticut", DE = "delaware", FL = "florida", GA = "georgia",HI = "hawaii", ID = "idaho", IL = "illinois", IN = "indiana", IA = "iowa", KS = "kansas", KY = "kentucky", LA = "louisiana", ME = "maine", MD = "maryland", MA = "massachusetts", MI = "michigan", MN = "minnesota", MS = "mississippi", MO = "missouri", MT = "montana", NE = "nebraska", NV = "nevada", NH = "new_hampshire", NJ = "new_jersey", NM = "new_mexico", NY = "new_york", NC = "north_carolina", ND = "north_dakota", OH = "ohio", OK = "oklahoma", OR = "oregon", PA = "pennsylvania", RI = "rhode_island", SC = "south_carolina", SD = "south_dakota", TN = "tennessee", TX = "texas", UT = "utah", VT = "vermont", VA = "virginia", WA = "washington", WV = "west_virginia", WI = "wisconsin", WY = "wyoming", DC = "district_of_columbia")
+#Loop through each state to remove "rate_"
+for (abbrev in names(abbre_state)) {
+  pattern <- paste0("rate_", abbre_state[abbrev])
+  colnames(mortality_gun ) <- gsub(pattern, abbrev, colnames(mortality_gun ))
+}
+
+#Convert string columns from char to double columns 6 to 69
+mortality_gun <- mortality_gun %>%
+  mutate(across(.cols = 6:69, .fns = as.double))
+#Group by year
+mortality_gun <- mortality_gun %>%
+  mutate(year = substr(year_and_quarter, 1, 4)) %>%  
+  group_by(year)
+#Select last Quarter of 2023
+mortality_gun_2023 <- mortality_gun %>%
+  filter(year_and_quarter == "2023 Q4")
+#Pivoting Long
+df_gun_2023_long <- mortality_gun_2023 %>%
+  pivot_longer (
+    cols = c(AK:WY),  
+    names_to = "state", 
+    values_to = "rate"  
+  )
+# reorder columns
+final_gun <- df_gun_2023_long %>%
+  select(year, state, rate)
+# Add an ID column
+final_gun$ID <- seq_along(final_gun$year)
+#reorder columns
+final_gun <- final_gun[, c("ID", "year", "state", "rate")]
+# final result
+head(final_gun)
+```
+
+### Loading gun control laws dataset
+
+Extracted from the law center score card, data scrapped from URL table
+
+```{r laws}
+# URL of the website 
+url <- "https://giffords.org/lawcenter/resources/scorecard/" 
+  
+# Read the HTML code of the page 
+html_code <- read_html(url) 
+  
+# Use the html_nodes function to extract the table 
+law_html <- html_code %>% html_nodes("table") %>% .[[1]] 
+  
+# Use the html_table function to convert the table  
+# HTML code into a data frame 
+law_df <- law_html %>% html_table() 
+  
+# Inspect the first few rows of the data frame 
+head(law_df)
+```
+
+Remove columns to keep only the columns need it for the analysis.
+
+```{r clean}
+#remove columns
+remove_law <- c(
+  "Gun Law Strength
+                                                (Ranked)", "Gun Death Rate
+                                                (Ranked)" ,"Gun Death Rate
+                                                (per 100K)", "X"
+)
+# Subset the data frame to exclude specific columns
+law_df1<- law_df[, !names(law_df) %in% remove_law]
+
+# Remove last row of dataset
+law_df2 <- law_df1[-51,]
+# create ID column to merge datasets
+law_df2$ID <- seq_along(law_df2$Grade)
+# Reorder the columns
+law_df2 <- law_df2[, c("ID","State", "Grade")]
+# Convert data into dataframe
+law_df2 <- data.frame(law_df2, row.names = NULL)
+# Print the updated data frame 
+head(law_df2)
+```
+
+Convert values of Grade column into integer.
+
+```{r integer}
+final_law <- law_df2 %>%
+  mutate(Grade = case_when(
+      Grade == "F" ~ "1",
+      Grade == "D+" ~ "2",
+      Grade == "D-" ~ "2",
+      Grade == "C+" ~ "3",
+      Grade == "C-" ~ "3",
+      Grade == "C" ~ "3",
+      Grade == "B+" ~ "4",
+      Grade == "B-" ~ "4", 
+      Grade == "B" ~ "4",
+      Grade == "A-" ~ "5",
+      Grade == "A" ~ "5",
+      
+      TRUE ~ Grade
+  
+    )
+  )
+
+final_law
+```
+
+Merge both Datasets to create visualizations
+
+```{r merge}
+# insert values manually for more data accuracy
+gunstats_df <- final_gun %>%
+  mutate(
+    grade = case_when(
+      state %in% c("AL","AK","AZ","AR","GA","ID","IA","KS","KY","LA","MO","MS","MT","ND","OK","SD","TN","TX","UT","WV","WY") ~ "1",
+      state  %in% c("FL","IN","ME","NH","OH","SC")~ "2",
+      state %in% c("NE","NM","NC","WI") ~ "3",
+      state %in% c("DE","MI","MN","NV","PA","RI","VT","VA") ~ "4",
+      state %in% c("CA","CO","CT","DC","HI","IL","MD","MA","NJ","NY","OR","WA") ~ "5",
+      TRUE ~ NA_character_
+    )
+  )
+#convert new column to numeric values
+gunstats_df$grade <- as.numeric(gunstats_df$grade)
+
+# Final dataframe for graphics
+gunstats_df
+```
+
+First heatmap displays the gun control laws strength rating for each state with the mortality rate on it, with 1 as most lax to 5 as most strict.
+
+```{r heatmap}
+#Setting colors in a different variable, for gun control laws categories
+category_colors <- c(
+  "1" = "#d35400",   # most lax
+  "2" = "#e67e22",   # lax
+  "3" = "#f39c12",   # moderate
+  "4" = "#f1c40f",   # strict
+  "5" = "#f4d03f"    # most strict
+)
+
+heatmap2 <- plot_geo(gunstats_df, locationmode = 'USA-states') %>%
+  add_trace(
+    z = gunstats_df$grade,
+    locations = gunstats_df$state,
+    color = gunstats_df$grade,
+    colors = category_colors,
+    text = ~paste("State: ",state, "<br>Grade: ",grade, "<br>Death Rate: ",rate),
+    hoverinfo = "text"
+  )
+
+heatmap2 <- heatmap2 %>%
+  layout(
+    title = "Gun control laws strenght level and death rate by states ",
+    geo = list(
+      scope = 'usa',
+      projection = list(type = 'albers usa'),
+      showlakes = TRUE,
+      lakecolor = toRGB('white')
+    )
+  ) 
+
+heatmap2 <- heatmap2 %>%
+  colorbar(
+    title = "Gun Control Laws levels",
+    tickvals = 1:5,
+    ticktext = c("1:Most Lax", "2:Lax", "3:Moderate", "4:Strict", "5:Most Strict"),
+    ticks = "outside"
+  )
+heatmap2
+```
+
+```{r}
+library(imager)
+im = load.image("C:/Users/vitug/OneDrive/Desktop/CUNY Masters/DATA_608/heatmap.png")
+plot(im) 
+```
+
+
+```{r final}
+# create a grade_colors variable
+grade_colors <- c("1" = "#d35400", "2" = "#e67e22", "3" = "#f39c12", 
+                  "4" = "#f1c40f", "5" = "#f4d03f")
+gunstats_df <- gunstats_df %>%
+  mutate(state = toupper(state))
+# Scatter plot with regression line and states legend
+ggplot(gunstats_df, aes(x = grade, y = rate, color = state)) +
+  geom_point(size = 3) +
+  geom_smooth(method = "lm", se = TRUE, color = "red") +  # Add regression line with confidence interval
+  geom_text(aes(label = grade), vjust = -0.5, hjust = 0.5, size = 3, color = "black") +  # Annotate with grades
+  labs(x = "Gun Law Strength Rank", y = "Mortality Rate") +
+  
+  theme_minimal() +
+  theme(
+    panel.grid = element_blank()
+  )
+```
+
+
+# Conclussion.
+
+## Do stricter firearm control laws help reduce firearm mortality?
+
+Based on the visualization, the answer is yes, stricter firearms laws reduce firearm mortality, states with most strict firearms laws such as California, New Jersey, and Colorado tends to have a lower gun death rate(per 100k) than other states such as Alabama, Arizona, and Georgia with the most lax gun control laws with higher gun death rate(per 100k)

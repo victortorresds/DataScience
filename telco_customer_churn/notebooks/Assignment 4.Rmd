@@ -1,0 +1,431 @@
+---
+title: "Assignment 4"
+author: "Victor Torres"
+date: "2025-05-10"
+output:
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries, include= FALSE,warning=FALSE,message=FALSE}
+library(tidyverse)      
+library(caret)        
+library(corrplot)
+library(MASS)
+library(rpart)          
+library(rpart.plot)     
+library(glmnet)         
+library(pROC)  
+library(gridExtra)
+library(scales)
+library(neuralnet)
+library(e1071)
+```
+
+# Final Project
+
+## Sections {.tabset .tabset-fade .tabset-pills}
+
+### Choose a dataset
+
+You get to decide which dataset you want to work on. The data set must be different from the ones used in previous homeworks You can work on a problem from your job, or something you are interested in. You may also obtain a dataset from sites such as Kaggle, Data.Gov, Census Bureau, USGS or other open data portals.
+
+##### For this assignment, I decided to use a "Telco Customer Churn" dataset that I found in Kaggle. This data is about a fictional telco company that provided home phone and Internet services to 7043 customers in California in Q3. It indicates which customers have left, stayed, or signed up for their service. Multiple important demographics are included for each customer, as well as a Satisfaction Score, Churn Score, and Customer Lifetime Value (CLTV) index.
+
+```{r}
+# Load dataset
+teldata <- read.csv("C:/Users/vitug/OneDrive/Desktop/CUNY Masters/DATA_622/telco.csv", stringsAsFactors = FALSE)
+# Review data structure
+str(teldata)
+
+# Data Summary
+summary(teldata)
+
+# Check for missing values
+missing_values <- colSums(is.na(teldata))
+print(missing_values[missing_values > 0])
+```
+
+### {.tabset .tabset-fade .tabset-pills}
+
+### Describe the problem you are trying to solve.
+
+The main goal of this analysis is to find out the rate of customers that stops doing business with the company, find out what are the main factors and behaviors that might impact to this decision, such as "age", "location", "marital status", "competitors offers", "customer service satisfaction", etc. This analysis is crucial for the company because it directly displays its overall business performance as well as the company revenue and losses.
+
+### Describe your dataset and what you did to prepare the data for analysis.
+
+After reviewing the dataset structure and summary, I can see that data frame contains information about 7,043 telecom customers with 50 variables covering various aspects of customer profiles and behaviors, some of the most important are:
+
+\- Demographic information: Age, gender, marital status, dependents, location.
+
+\- Account information: Tenure, contract type, payment method, billing preferences.
+
+\- Service usage: Phone service, internet service, add-on services Financial metrics: Monthly charges, total charges, CLTV (Customer Lifetime Value).\
+
+#### Data Preparation
+
+Before proceeding to build the models, I am going to perform some data preparation, type conversion, feature engineering, and normalization to obtain more accurate results.
+
+```{r}
+# Convert categorical variables to factors
+categorical_vars <- c("Gender", "Under.30", "Senior.Citizen", "Married", 
+                      "Dependents", "Country", "State", "City", "Quarter", 
+                      "Referred.a.Friend", "Offer", "Phone.Service", 
+                      "Multiple.Lines", "Internet.Service", "Internet.Type",
+                      "Online.Security", "Online.Backup", "Device.Protection.Plan",
+                      "Premium.Tech.Support", "Streaming.TV", "Streaming.Movies",
+                      "Streaming.Music", "Unlimited.Data", "Contract",
+                      "Paperless.Billing", "Payment.Method", "Customer.Status",
+                      "Churn.Label", "Churn.Category", "Churn.Reason")
+
+teldata[categorical_vars] <- lapply(teldata[categorical_vars], as.factor)
+
+# Create binary churn variable
+teldata$Churn.Binary <- ifelse(teldata$Churn.Label == "Yes", 1, 0)
+```
+
+#### EDA
+
+Now that the data is prepared, I am going to analyze the distribution of the "churn" variable, as well as relationships between several variables with the 'churn" variable.
+
+```{r}
+# Basic distribution of churn
+churn_distribution <- teldata %>%
+  count(Churn.Label) %>%
+  mutate(percentage = n / sum(n) * 100)
+print(churn_distribution)
+
+# Visualize churn distribution
+ggplot(teldata, aes(x = Churn.Label, fill = Churn.Label)) +
+  geom_bar() +
+  geom_text(stat = "count", aes(label = scales::percent(..count../sum(..count..))), 
+            position = position_stack(vjust = 0.5)) +
+  labs(title = "Distribution of Customer Churn", x = "Churn Status", y = "Count") +
+  theme_minimal()
+
+# Exploring relationship between age and churn
+ggplot(teldata, aes(x = Age, fill = Churn.Label)) +
+  geom_histogram(binwidth = 5, position = "dodge") +
+  labs(title = "Age Distribution by Churn Status", x = "Age", y = "Count") +
+  theme_minimal()
+
+# Exploring relationship between tenure and churn
+ggplot(teldata, aes(x = Tenure.in.Months, fill = Churn.Label)) +
+  geom_histogram(binwidth = 5, position = "dodge") +
+  labs(title = "Tenure Distribution by Churn Status", x = "Tenure in Months", y = "Count") +
+  theme_minimal()
+
+# Contract type and churn
+ggplot(teldata, aes(x = Contract, fill = Churn.Label)) +
+  geom_bar(position = "fill") +
+  labs(title = "Churn Rate by Contract Type", x = "Contract Type", y = "Proportion") +
+  theme_minimal()
+
+# Monthly charges and churn
+ggplot(teldata, aes(x = Monthly.Charge, fill = Churn.Label)) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Distribution of Monthly Charges by Churn Status", x = "Monthly Charge", y = "Density") +
+  theme_minimal()
+
+# Internet type and churn
+ggplot(teldata, aes(x = Internet.Type, fill = Churn.Label)) +
+  geom_bar(position = "fill") +
+  labs(title = "Churn Rate by Internet Type", x = "Internet Type", y = "Proportion") +
+  theme_minimal()
+
+# Gender and churn
+ggplot(teldata, aes(x = Gender, fill = Churn.Label)) +
+  geom_bar(position = "fill") +
+  labs(title = "Churn Rate by Gender", x = "Gender", y = "Proportion") +
+  theme_minimal()
+
+# Payment method and churn
+ggplot(teldata, aes(x = Payment.Method, fill = Churn.Label)) +
+  geom_bar(position = "fill") +
+  labs(title = "Churn Rate by Payment Method", x = "Payment Method", y = "Proportion") +
+  theme_minimal()
+```
+
+#### Correlation
+
+I am plotting a correlation plot to analyze numerical variables.
+
+```{r}
+# Correlation analysis for numerical variables
+numeric_vars <- select_if(teldata, is.numeric)
+correlation_matrix <- cor(numeric_vars, use = "complete.obs")
+
+# Plot correlation matrix
+corrplot(correlation_matrix, method = "circle", type = "upper", 
+         tl.col = "black", tl.srt = 45, 
+         title = "Correlation of Numerical Variables")
+```
+
+
+### Select one of the methodologies studied in weeks 1-10, and another methodology from weeks 11-15 to apply in the new dataset selected.
+
+Based on the data structure and the problem that I am trying to solve, I am going to use Logistic Regression methodology from week 1-10 and Neural Networks methodology from week 11-15. These methodologies are the most appropriate for this assignment because it will help me find key insights within the dataset.
+
+Prepare data for first model, create a new dataframe by selecting the most important variables, double check missing values, and split data into training and testing sets
+
+```{r}
+model_data <- dplyr::select(teldata, Age, Tenure.in.Months, Monthly.Charge, Total.Charges, 
+                           Satisfaction.Score, Number.of.Referrals, 
+                           Avg.Monthly.Long.Distance.Charges, Avg.Monthly.GB.Download,
+                           Contract, Internet.Type, Online.Security, Online.Backup, 
+                           Premium.Tech.Support, Paperless.Billing, Payment.Method, 
+                           Churn.Binary)
+
+
+# Check for missing values in model data
+missing_values <- colSums(is.na(model_data))
+print(missing_values[missing_values > 0])
+
+numeric_cols <- sapply(model_data, is.numeric)
+for (col in names(model_data)[numeric_cols]) {
+  if (sum(is.na(model_data[[col]])) > 0) {
+    model_data[[col]][is.na(model_data[[col]])] <- median(model_data[[col]], na.rm = TRUE)
+  }
+}
+
+# Split the data into training and testing sets
+set.seed(123)
+train_indices <- createDataPartition(model_data$Churn.Binary, p = 0.7, list = FALSE)
+train_data <- model_data[train_indices, ]
+test_data <- model_data[-train_indices, ]
+```
+
+Prepare the data for calculations, create functions to extracts all the metric values required for the analysis.
+
+```{r}
+# Define the evaluation metrics function
+evaluate_model <- function(actual, predicted, predicted_prob = NULL) {
+  # Calculate confusion matrix
+  conf_matrix <- confusionMatrix(factor(predicted, levels = c(0, 1)), 
+                                 factor(actual, levels = c(0, 1)))
+  
+  # Extract metrics
+  accuracy <- conf_matrix$overall["Accuracy"]
+  precision <- conf_matrix$byClass["Pos Pred Value"]
+  recall <- conf_matrix$byClass["Sensitivity"]
+  f1_score <- conf_matrix$byClass["F1"]
+  
+  # Calculate AUC if probabilities are provided
+  auc_value <- NA
+  if (!is.null(predicted_prob)) {
+    roc_obj <- roc(actual, predicted_prob)
+    auc_value <- auc(roc_obj)
+  }
+  
+  # Return the metrics
+  return(list(
+    Accuracy = accuracy,
+    Precision = precision,
+    Recall = recall,
+    F1_Score = f1_score,
+    AUC = auc_value,
+    Confusion_Matrix = conf_matrix$table
+  ))
+}
+```
+
+
+**Logistic Regression Model**
+
+```{r}
+# Create a formula for our logistic model
+logistic_formula <- as.formula("Churn.Binary ~ Age + Tenure.in.Months + Monthly.Charge + 
+                              Satisfaction.Score + Contract + Internet.Type + 
+                              Online.Security + Premium.Tech.Support")
+
+# Train the logistic regression model
+logistic_model <- glm(logistic_formula, data = train_data, family = "binomial")
+
+# Summary of the model
+summary(logistic_model)
+
+# Make predictions on test data
+logistic_predictions_prob <- predict(logistic_model, test_data, type = "response")
+logistic_predictions <- ifelse(logistic_predictions_prob > 0.5, 1, 0)
+
+# Evaluate the logistic regression model
+logistic_results <- evaluate_model(test_data$Churn.Binary, logistic_predictions, logistic_predictions_prob)
+
+# Print the results
+cat("Logistic Regression Results:\n")
+print(logistic_results)
+
+# Plot ROC curve for logistic regression
+roc_logistic <- roc(test_data$Churn.Binary, logistic_predictions_prob)
+plot(roc_logistic, main = "ROC Curve - Logistic Regression", col = "blue")
+abline(a = 0, b = 1, lty = 2, col = "red")
+
+# Calculate variable importance for logistic regression
+logistic_importance <- abs(coef(logistic_model)[-1])  # Exclude intercept
+logistic_importance_df <- data.frame(
+  Feature = names(logistic_importance),
+  Importance = as.numeric(logistic_importance)
+)
+logistic_importance_df <- logistic_importance_df %>% arrange(desc(Importance))
+
+# Plot variable importance
+ggplot(logistic_importance_df, aes(x = reorder(Feature, Importance), y = Importance)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Feature Importance - Logistic Regression", x = "Features", y = "Importance") +
+  theme_minimal()
+```
+
+The second model that I am going to use from week 11-15 is Neural Network
+
+**Neural Networks**
+
+```{r}
+# Prepare the data for neural network (scaling)
+numeric_predictors <- c("Age", "Tenure.in.Months", "Monthly.Charge", 
+                       "Total.Charges", "Satisfaction.Score", "Number.of.Referrals", 
+                       "Avg.Monthly.Long.Distance.Charges", "Avg.Monthly.GB.Download")
+
+# Create dataset with only numeric predictors for neural network
+train_data_nn <- train_data[, c(numeric_predictors, "Churn.Binary")]
+test_data_nn <- test_data[, c(numeric_predictors, "Churn.Binary")]
+
+# Scale numeric features
+preproc <- preProcess(train_data_nn[, numeric_predictors], method = c("center", "scale"))
+train_data_scaled <- predict(preproc, train_data_nn)
+test_data_scaled <- predict(preproc, test_data_nn)
+
+# Create formula for neural network
+nn_formula <- as.formula("Churn.Binary ~ Age + Tenure.in.Months + Monthly.Charge + 
+                        Total.Charges + Satisfaction.Score + Number.of.Referrals + 
+                        Avg.Monthly.Long.Distance.Charges + Avg.Monthly.GB.Download")
+
+# Train neural network model
+set.seed(123)
+nn_model <- neuralnet(
+  formula = nn_formula,
+  data = train_data_scaled,
+  hidden = c(5),  # One hidden layer with 5 neurons
+  linear.output = FALSE,  # For classification
+  threshold = 0.01,
+  stepmax = 1e+06,  # Increase the maximum steps for convergence
+  rep = 1,  # Number of repetitions
+  err.fct = "ce"  # Cross-entropy error function for classification
+)
+```
+
+```{r plot}
+# Plot the neural network
+plot(nn_model, rep="best")
+```
+
+```{r}
+# Make predictions
+nn_output <- compute(nn_model, test_data_scaled[, numeric_predictors])
+nn_predictions_prob <- nn_output$net.result
+nn_predictions <- ifelse(nn_predictions_prob > 0.5, 1, 0)
+
+# Evaluate the neural network model
+nn_results <- evaluate_model(test_data$Churn.Binary, nn_predictions, nn_predictions_prob)
+# Print the results
+cat("Neural Network Results:\n")
+print(nn_results)
+```
+
+```{r}
+# Plot ROC curve for neural network
+roc_nn <- roc(test_data$Churn.Binary, nn_predictions_prob)
+plot(roc_nn, main = "ROC Curve - Neural Network", col = "green")
+abline(a = 0, b = 1, lty = 2, col = "red")
+```
+
+
+### What's the purpose of the analysis performed
+
+The purpose of this analysis is to find out the main reasons of customers leaving or stop doing business with the company, find out what are the most relevant factors that might have a high impact on customers, such as competition offering better prices, bad customer service, and demographics. 
+
+### Make your conclusions from your analysis. Please be sure to address the business impact (it could be of any domain) of your solution.
+
+First, I am going to compare the two models built to determine which one is the most accurate for this project:
+
+**Model comparison**
+
+```{r}
+# Create a data frame for comparison
+model_comparison <- data.frame(
+  Model = c("Logistic Regression", "Neural Network"),
+  Accuracy = c(logistic_results$Accuracy, nn_results$Accuracy),
+  Precision = c(logistic_results$Precision, nn_results$Precision),
+  Recall = c(logistic_results$Recall, nn_results$Recall),
+  F1_Score = c(logistic_results$F1_Score, nn_results$F1_Score),
+  AUC = c(logistic_results$AUC, nn_results$AUC)
+)
+
+print(model_comparison)
+
+# Plot the ROC curves together for comparison
+plot(roc_logistic, col = "blue", main = "ROC Curve Comparison")
+lines(roc_nn, col = "green")
+legend("bottomright", legend = c("Logistic Regression", "Neural Network"), 
+       col = c("blue", "green"), lwd = 2)
+abline(a = 0, b = 1, lty = 2, col = "red")
+```
+
+Based on the table and graph above, The neural network slightly outperformed logistic regression (85% vs 83% accuracy). Both models provide good predictive capability for identifying at-risk customers however, the logistic regression offers better interpret ability of key factors driving customers to leave the company.
+
+**Key Insights from Analysis**
+
+After Performing the analysis using both methodologies Logistic Regression and Neural Networks, we can say that there are several factors that have a strong impact on customers when they decided whether they want to stay or leave the company. Here is a list of the most important ones:
+
+**Demographic Factors**
+
+- **Age**: Older customers (seniors) have slightly tendency to stop doing business with the company.
+
+- **Dependents**: Customers without dependents are more likely to stay with the company.
+
+**Service Factors**
+
+- **Contract Type**: Month-to-month contracts have significantly higher churn rates (42.7%) compared to one-year (11.3%) and two-year contracts (2.8%).
+
+- **Additional Services**: Customers without online security, tech support, and backup services have much higher churn rates than the ones with those services.
+
+**Financial Factors**
+
+- **Monthly Charges**: Customers with higher monthly charges show increased leaving rates.
+
+- **Payment Method**: Electronic check payment method has the highest association with churn.
+
+
+**Satisfaction and Tenure**
+
+- **Satisfaction Score**: Lower satisfaction scores (1-2) strongly correlate with increased churn.
+
+- **Tenure**: Newer customers (0-12 months) have dramatically higher churn rates, with churn decreasing as tenure increases.
+
+I think that the analysis has valuable insights about top reasons that customers tend to stop doing business with the company, based on the results. the top reasons for high churn rates are manageable and it can be corrected to drastically improve the customer's satisfaction and retention rates, the visualization below shows the top churn reasons and it is vital for the company to address this problems in order to keep the company running:
+
+```{r}
+# Explore churn reasons
+churn_reasons <- teldata %>%
+  filter(Churn.Label == "Yes") %>%
+  count(Churn.Reason) %>%
+  arrange(desc(n)) %>%
+  mutate(percentage = n / sum(n) * 100)
+
+# Visualize top churn reasons
+top_reasons <- churn_reasons %>%
+  top_n(10, n)
+
+ggplot(top_reasons, aes(x = reorder(Churn.Reason, n), y = n)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Churn Reasons", x = "", y = "Count") +
+  theme_minimal()
+```
+
+**Recommendations**
+
+Based on the analysis, the company should upgrade the devices that they offer to customers, implement better promotional packages to new customers, review and modify their package prices and internet speed limits, and to improve customer service care.

@@ -1,0 +1,4 @@
+* text=auto
+*.html linguist-detectable=false
+*.Rmd linguist-detectable=true
+*.Py linguist-detectable=true
