@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints
+
+# Data files (uncomment if you don't want to track large datasets)
+# *.csv
+# *.xlsx
+# *.json
+# *.parquet
+# data/raw/*
+# !data/raw/.gitkeep
+
+# Large files
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+*.joblib
+
+# R
+.Rhistory
+.RData
+.Rproj.user
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Models (uncomment if models are too large)
+# models/*.h5
+# models/*.pkl
+
+# Environment variables
+.env
+.env.local
+
+# Logs
+*.log
