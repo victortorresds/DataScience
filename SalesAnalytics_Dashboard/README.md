@@ -6,7 +6,7 @@
 [![Data Warehouse](https://img.shields.io/badge/Data_Warehouse-Design-blue)](https://github.com/vitugo23/Sales-Analytics-Dashboard)
 [![Analytics](https://img.shields.io/badge/Domain-Sales_Analytics-orange)](https://github.com/vitugo23/Sales-Analytics-Dashboard)
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Overview](#overview)
 - [My Contributions](#my-contributions)
@@ -19,7 +19,7 @@
 - [Views](#views)
 - [Technologies Used](#technologies-used)
 
-## 🎯 Overview
+## Overview
 
 The Sales Analytics Dashboard Data system is a dimensional data warehouse designed for sales performance analysis, trend identification, and business intelligence reporting. It implements a star schema design optimized for analytical queries and supports complex time-series analysis, customer segmentation, and product performance metrics.
 
@@ -36,13 +36,13 @@ This project demonstrates expertise in data warehousing concepts, dimensional mo
 - **Year-over-Year Comparisons** - Trend analysis with historical data
 - **Rolling Aggregations** - Moving averages, cumulative totals
 
-## 👨‍💻 My Contributions
+## My Contributions
 
 **Role**: Data Warehouse Architect & BI Developer
 
 ### Core Responsibilities
 
-#### 🏗️ Dimensional Modeling & Star Schema Design
+#### Dimensional Modeling & Star Schema Design
 - Designed **star schema** with fact and dimension tables
 - Created **date dimension** with full calendar attributes
 - Implemented **slowly changing dimensions (SCD Type 2)** for historical tracking
@@ -50,7 +50,7 @@ This project demonstrates expertise in data warehousing concepts, dimensional mo
 - Established **grain definition** for fact tables
 - Designed **surrogate keys** for dimension management
 
-#### 📊 Complex Analytical Queries
+#### Complex Analytical Queries
 - **Time-Series Analysis**: Year-over-year, month-over-month comparisons
 - **Window Functions**: Running totals, moving averages, rankings
 - **Customer Analytics**: RFM segmentation, cohort analysis
@@ -58,7 +58,7 @@ This project demonstrates expertise in data warehousing concepts, dimensional mo
 - **Product Mix Analysis**: Cross-selling, basket analysis
 - **Territory Performance**: Regional sales comparison
 
-#### 🔧 Business Intelligence Logic
+#### Business Intelligence Logic
 - **KPI Calculations**: Revenue, margin, growth rates
 - **Trend Analysis**: Seasonal patterns, forecasting
 - **Cohort Analysis**: Customer retention, lifetime value
@@ -66,7 +66,7 @@ This project demonstrates expertise in data warehousing concepts, dimensional mo
 - **Pareto Analysis**: 80/20 rule implementation
 - **Sales Variance**: Budget vs actual analysis
 
-#### 📈 Performance Optimization
+#### Performance Optimization
 - Created **columnstore indexes** for analytical queries
 - Implemented **partitioning** on fact tables by date
 - Built **aggregate tables** for common reports
@@ -74,7 +74,7 @@ This project demonstrates expertise in data warehousing concepts, dimensional mo
 - Designed **materialized views** for dashboards
 - Established **indexing strategy** for dimensions
 
-#### 🎯 Data Quality & Integration
+#### Data Quality & Integration
 - Implemented **data validation** rules
 - Created **ETL stored procedures** for data loading
 - Built **incremental load patterns**
@@ -171,7 +171,7 @@ ORDER BY OrderDate;
 
 ---
 
-## ✨ Features
+## Features
 
 ### Sales Analytics
 - Daily, weekly, monthly sales summaries
@@ -239,7 +239,7 @@ ORDER BY OrderDate;
 - **12 Views** for dashboards and reporting
 - **Columnstore Indexes** for analytics performance
 
-## 📊 Entity Relationship Diagram
+## Entity Relationship Diagram
 
 ```
                     ┌─────────────────┐
@@ -296,7 +296,7 @@ ORDER BY OrderDate;
         └──────────────────────┘
 ```
 
-## 🚀 Setup Instructions
+## Setup Instructions
 
 ### Prerequisites
 
@@ -363,7 +363,7 @@ SELECT TOP 10 * FROM vw_DailySalesSummary
 ORDER BY SalesDate DESC;
 ```
 
-## 📝 Sample Queries
+## Sample Queries
 
 ### Sales Performance
 
@@ -448,7 +448,7 @@ LEFT JOIN MonthlySales prev
 ORDER BY curr.Year DESC, curr.Month;
 ```
 
-## 🔧 Stored Procedures
+## Stored Procedures
 
 ### sp_LoadDailySalesSummary
 Aggregates daily sales for performance
@@ -473,7 +473,7 @@ EXEC sp_GetSalesPerformance
     @EndDate = '2024-12-31';
 ```
 
-## 📊 Views
+## Views
 
 ### vw_DailySalesSummary
 Daily sales aggregates for dashboards
@@ -490,7 +490,7 @@ Regional performance comparison
 ### vw_SalesGrowthTrend
 Month-over-month growth rates
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - **SQL Server** - Data warehouse platform
 - **T-SQL** - Query language
@@ -499,7 +499,7 @@ Month-over-month growth rates
 - **Window Functions** - Advanced analytics
 - **CTEs** - Complex query organization
 
-## 📈 Skills Demonstrated
+## Skills Demonstrated
 
 ```
 ✓ Data Warehouse Design           ✓ Time-Series Analysis
@@ -509,14 +509,4 @@ Month-over-month growth rates
 ✓ Business Intelligence           ✓ Performance Tuning
 ✓ ETL Concepts                    ✓ Aggregate Tables
 ```
-
-## 📞 Contact
-
-**Victor Torres**
-- GitHub: [@vitugo23](https://github.com/vitugo23)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourprofile)
-- Email: your.email@example.com
-
 ---
-
-**Part of my SQL Portfolio** | [View Other Projects](https://github.com/vitugo23)
