@@ -268,6 +268,23 @@ X_train_balanced, y_train_balanced = smote.fit_resample(X_train, y_train)
 
 ---
 
+---
+## Visualizations
+
+### Class Distribution
+![Class Distribution](images/class_distribution.png)
+
+### Model Comparison
+![Model Comparison](images/model_comparison.png)
+
+### Confusion Matrix
+![Confusion Matrix](images/confusion_matrix_best.png)
+
+### ROC Curves
+![ROC Curves](images/roc_curves.png)
+
+---
+
 ## Key Findings
 
 ### 1. Class Imbalance is Extreme
