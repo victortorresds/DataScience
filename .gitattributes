@@ -1,14 +1,9 @@
 
 
-# Create .gitattributes file
-notepad .gitattributes
-```
-
-**Add this content:**
-```
+cat > .gitattributes << 'EOF'
 # Ignore HTML files in language statistics
-*.html linguist-detectable=false
-*.htm linguist-detectable=false
+*.html linguist-vendored
+*.htm linguist-vendored
 
 # Mark Jupyter notebooks as Python
 *.ipynb linguist-language=Python
@@ -19,3 +14,4 @@ notepad .gitattributes
 
 # Ensure Python is detected
 *.py linguist-detectable=true
+EOF
