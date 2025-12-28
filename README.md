@@ -1,7 +1,7 @@
-# 📊 Data Science Portfolio
+# Data Science Portfolio
 
 **Victor Torres**  
-*Master's in Data Science, CUNY (Expected: December 2025)*
+*Master's in Data Science, CUNY (December 2025)*
 
 Welcome to my data science portfolio! This repository showcases a diverse collection of end-to-end projects demonstrating proficiency in machine learning, econometrics, causal inference, statistical analysis, data visualization, and business intelligence.
 
@@ -11,27 +11,27 @@ Welcome to my data science portfolio! This repository showcases a diverse collec
 
 ---
 
-## 👨‍💻 About Me
+## About Me
 
 I'm a Master's student in Data Science at CUNY, passionate about transforming data into actionable insights that drive business decisions and social impact. With a unique background spanning software development, trucking industry operations, and data science, I combine technical expertise with real-world business understanding.
 
 **Background:**
-- 🎓 **Master's in Data Science** - CUNY (Graduating December 2025)
-- 🚚 **Industry Experience** - 2 years as trucking owner-operator
-- 📜 **Google Data Analytics Certification** - Coursera
-- 💻 **Full Stack Development** - IBM Certification
-- 🔧 **Technical Skills:** Python, R, SQL, Java, C#
+- **Master's in Data Science** - CUNY (Graduating December 2025)
+- **Industry Experience** - 2 years as trucking owner-operator
+- **Google Data Analytics Certification** - Coursera
+- **Full Stack Development** - IBM Certification
+- **Technical Skills:** Python, R, SQL, Java, C#
 
 **What Drives Me:**
 I'm fascinated by uncovering meaningful patterns in data that can improve business outcomes and contribute to social good. Whether it's analyzing trade policy impacts, predicting customer churn, or optimizing manufacturing processes, I approach each problem with rigor, curiosity, and a commitment to measurable impact.
 
 ---
 
-## 🏆 Master's Capstone Project
+## Master's Capstone Project
 
-### [🎓 Impact of US Tariffs on Transportation Equipment Imports](https://github.com/victortorresds/Tariff-Analysis)
+### [Impact of US Tariffs on Transportation Equipment Imports](https://github.com/victortorresds/Tariff-Analysis)
 
-**Econometric Analysis | Causal Inference | December 2024**
+**Econometric Analysis | Causal Inference | December 2025**
 
 My Master's capstone applies rigorous **difference-in-differences methodology** to evaluate the causal impact of US tariffs on Chinese transportation equipment imports, combining 2 years of trucking industry experience with advanced econometric techniques.
 
@@ -50,10 +50,10 @@ My Master's capstone applies rigorous **difference-in-differences methodology** 
 - **Sources:** Federal Reserve Economic Data (FRED), US Census Bureau
 
 **Deliverables:**
-- 📄 [55-page Research Paper](https://github.com/victortorresds/Tariff-Analysis/blob/main/final_paper/final_paper.pdf)
-- 🎤 [Defense Presentation](https://github.com/victortorresds/Tariff-Analysis/blob/main/presentation/presentation.pdf)
-- 💻 [Reproducible Analysis Code](https://github.com/victortorresds/Tariff-Analysis/tree/main/code)
-- 📊 [20+ Publication-Quality Visualizations](https://github.com/victortorresds/Tariff-Analysis/tree/main/figures)
+- [55-page Research Paper](https://github.com/victortorresds/Tariff-Analysis/blob/main/final_paper/final_paper.pdf)
+- [Defense Presentation](https://github.com/victortorresds/Tariff-Analysis/blob/main/presentation/presentation.pdf)
+- [Reproducible Analysis Code](https://github.com/victortorresds/Tariff-Analysis/tree/main/code)
+- [20+ Publication-Quality Visualizations](https://github.com/victortorresds/Tariff-Analysis/tree/main/figures)
 
 **Why This Matters:**
 This research demonstrates my ability to:
@@ -62,11 +62,11 @@ This research demonstrates my ability to:
 - Communicate complex findings to diverse audiences
 - Build reproducible, well-documented research workflows
 
-**[📖 Read Full Research →](https://github.com/victortorresds/Tariff-Analysis)** | **[💻 View Code →](https://github.com/victortorresds/Tariff-Analysis/tree/main/code)**
+**[Read Full Research →](https://github.com/victortorresds/Tariff-Analysis)** | **[View Code →](https://github.com/victortorresds/Tariff-Analysis/tree/main/code)**
 
 ---
 
-## 🛠️ Technical Skills
+## Technical Skills
 
 ### Programming Languages
 ![Python](https://img.shields.io/badge/Python-Expert-blue?logo=python)
@@ -102,9 +102,9 @@ This research demonstrates my ability to:
 
 ---
 
-## 📁 Portfolio Projects
+## Portfolio Projects
 
-### 🏭 [ABC Beverage pH Prediction](./ABC_Beverage)
+### [ABC Beverage pH Prediction](./ABC_Beverage)
 **Predictive modeling for manufacturing quality control**
 
 ![Status](https://img.shields.io/badge/Status-Completed-success)
@@ -130,7 +130,7 @@ Developed predictive models to forecast beverage pH levels in manufacturing, ena
 
 ---
 
-### ⏰ [Time Series Forecasting: Financial & Energy Applications](./ATM-Power-Forecasting)
+### [Time Series Forecasting: Financial & Energy Applications](./ATM-Power-Forecasting)
 **Dual forecasting analysis of ATM cash demand and residential power consumption**
 
 ![Status](https://img.shields.io/badge/Status-Completed-success)
@@ -156,7 +156,7 @@ Applied advanced time series techniques to predict ATM cash withdrawals and resi
 
 ---
 
-### 🛒 [Market Basket Analysis: Grocery Purchase Patterns](./MB_Analysis)
+### [Market Basket Analysis: Grocery Purchase Patterns](./MB_Analysis)
 **Association rule mining and network analysis for retail optimization**
 
 ![Status](https://img.shields.io/badge/Status-Completed-success)
@@ -182,7 +182,7 @@ Analyzed 10,000 grocery transactions to uncover product associations and shoppin
 
 ---
 
-### 📞 [Telco Customer Churn Analysis](./telco_customer_churn)
+### [Telco Customer Churn Analysis](./telco_customer_churn)
 **Machine learning classification to predict customer attrition**
 
 ![Status](https://img.shields.io/badge/Status-Completed-success)
@@ -208,7 +208,7 @@ Built classification models to identify customers at risk of churning, enabling 
 
 ---
 
-### 🔫 [Gun Control Effectiveness Analysis](./Gun_Control_Analysis)
+### [Gun Control Effectiveness Analysis](./Gun_Control_Analysis)
 **Statistical analysis of gun law strictness vs. mortality rates**
 
 ![Status](https://img.shields.io/badge/Status-Completed-success)
@@ -234,7 +234,7 @@ Investigated the relationship between state gun law strictness and firearm morta
 
 ---
 
-### 🍎 [Food Security and Poverty in the United States](./FS_Analysis)
+### [Food Security and Poverty in the United States](./FS_Analysis)
 **Large-scale analysis of child food insecurity across America**
 
 ![Status](https://img.shields.io/badge/Status-Completed-success)
@@ -260,11 +260,11 @@ Analyzed 126,832 individuals from CPS Food Security Supplement data to examine c
 
 ---
 
-## 📈 Project Summary Matrix
+## Project Summary Matrix
 
 | Project | Domain | Techniques | Key Metric | Business Value |
 |---------|--------|------------|------------|----------------|
-| **🎓 Tariff Analysis** | **Trade Policy** | **DiD, Econometrics** | **-$10B/month** | **Policy insights** |
+| **Tariff Analysis** | **Trade Policy** | **DiD, Econometrics** | **-$10B/month** | **Policy insights** |
 | **ABC Beverage pH** | Manufacturing | Regression, Random Forest | R² = 0.64 | $700K+ savings |
 | **Time Series Forecasting** | Finance, Energy | ARIMA, ETS | MAPE = 3.2% | $500K-1M savings |
 | **Market Basket Analysis** | Retail | Association Rules, Networks | 15 Rules, Lift 2-3 | 12-18% basket ↑ |
@@ -274,7 +274,7 @@ Analyzed 126,832 individuals from CPS Food Security Supplement data to examine c
 
 ---
 
-## 🎯 What Makes This Portfolio Stand Out
+## What Makes This Portfolio Stand Out
 
 ### Diversity of Methods
 - **Causal Inference:** Difference-in-Differences, natural experiments (Capstone)
@@ -308,7 +308,7 @@ Analyzed 126,832 individuals from CPS Food Security Supplement data to examine c
 
 ---
 
-## 📚 Highlighted Skills by Project
+## Highlighted Skills by Project
 
 ### Programming & Tools
 | Skill | Projects |
@@ -322,7 +322,7 @@ Analyzed 126,832 individuals from CPS Food Security Supplement data to examine c
 ### Advanced Methods
 | Method | Projects |
 |--------|----------|
-| **Difference-in-Differences** | Tariff Analysis (Capstone) ⭐ |
+| **Difference-in-Differences** | Tariff Analysis (Capstone) |
 | **Random Forest** | ABC Beverage (Winner: R²=0.64) |
 | **Neural Networks** | Telco Churn (AUC=0.85) |
 | **ARIMA/ETS** | Time Series Forecasting (MAPE=3.2%) |
@@ -351,42 +351,43 @@ Analyzed 126,832 individuals from CPS Food Security Supplement data to examine c
 
 ---
 
-## 🏆 Key Accomplishments
+## Key Accomplishments
 
 ### Academic Excellence
-- 📚 Master's in Data Science (Expected Dec 2025)
-- 🎓 Master's Capstone: Econometric analysis with difference-in-differences
-- 📊 Google Data Analytics Certification
-- 💻 IBM Full Stack Development Certification
-- 📖 Comprehensive project portfolio spanning multiple domains and methods
+- Master's in Data Science (Dec 2025)
+- Bachelors in Information Technology SNHU
+- Master's Capstone: Econometric analysis with difference-in-differences
+- Google Data Analytics Certification
+- IBM Full Stack Development Certification
+- Comprehensive project portfolio spanning multiple domains and methods
 
 ### Technical Achievements
-- ✅ Deployed 7 end-to-end data science projects
-- ✅ Applied rigorous causal inference methodology (Master's standard)
-- ✅ Compared 50+ machine learning models across projects
-- ✅ Processed datasets ranging from 2,571 to 126,832 records
-- ✅ Achieved measurable business impact in every project
+- Deployed 7 end-to-end data science projects
+- Applied rigorous causal inference methodology (Master's standard)
+- Compared 50+ machine learning models across projects
+- Processed datasets ranging from 2,571 to 126,832 records
+- Achieved measurable business impact in every project
 
 ### Business Impact
-- 💰 **$3M+ in projected annual value** across all projects
-- 📈 **Quantified ROI** for each analysis (425% for ABC Beverage)
-- 🎯 **Actionable recommendations** implemented or implementable
-- 📊 **Data-driven decision making** enabled in multiple industries
-- 🏛️ **Policy insights** informing trade and public health decisions
+- **$3M+ in projected annual value** across all projects
+- **Quantified ROI** for each analysis (425% for ABC Beverage)
+- **Actionable recommendations** implemented or implementable
+- **Data-driven decision making** enabled in multiple industries
+- **Policy insights** informing trade and public health decisions
 
 ### Research Contribution
-- 📄 **55-page Master's thesis** on tariff policy impacts
-- 📊 **20+ publication-quality visualizations** in capstone
-- 🔬 **Rigorous methodology** validated across multiple robustness checks
-- 🎤 **Public presentation** defending research findings
+- **55-page Master's thesis** on tariff policy impacts
+- **20+ publication-quality visualizations** in capstone
+- **Rigorous methodology** validated across multiple robustness checks
+- **Public presentation** defending research findings
 
 ---
 
-## 🎓 Education
+## Education
 
 **Master of Science in Data Science**  
 City University of New York (CUNY)  
-*Expected Graduation: December 2025*
+*Expected Graduation December 2025*
 
 **Capstone Project:**  
 "Impact of US Tariffs on Chinese Transportation Equipment Imports: A Difference-in-Differences Analysis"
@@ -406,12 +407,12 @@ City University of New York (CUNY)
 
 ---
 
-## 📫 Let's Connect!
+## Let's Connect!
 
 I'm actively seeking **Data Science** and **Data Analyst** opportunities where I can apply my analytical skills to solve real-world problems and drive business value.
 
 **Contact Information:**
-- 📧 **Email:** victugo.torres23@gmail.com
+- 📧 **Email:** vitugo.torres@gmail.com
 - 💼 **LinkedIn:** [linkedin.com/in/vitugo](https://www.linkedin.com/in/vitugo)
 - 💻 **GitHub:** [@victortorresds](https://github.com/victortorresds)
 - 🎓 **Capstone:** [Tariff Analysis Research](https://github.com/victortorresds/Tariff-Analysis)
@@ -432,7 +433,7 @@ I'm actively seeking **Data Science** and **Data Analyst** opportunities where I
 
 ---
 
-## 🚀 Current Focus
+## Current Focus
 
 **Learning:**
 - Deep Learning and Neural Networks (TensorFlow, PyTorch)
@@ -453,13 +454,13 @@ I'm actively seeking **Data Science** and **Data Analyst** opportunities where I
 
 ---
 
-## 📊 GitHub Stats
+## GitHub Stats
 
 ![Victor's GitHub Stats](https://github-readme-stats.vercel.app/api?username=victortorresds&show_icons=true&theme=default)
 
 ---
 
-## 🗂️ Repository Structure
+## Repository Structure
 
 ```
 DataScience/
@@ -483,7 +484,7 @@ DataScience/
 
 ---
 
-## 💡 Philosophy
+## Philosophy
 
 > "Data science is not just about algorithms and models—it's about asking the right questions, applying rigorous methodology, telling compelling stories with data, and creating actionable insights that drive real-world impact."
 
@@ -496,7 +497,7 @@ I approach every project with:
 
 ---
 
-## 🤝 Collaboration
+## Collaboration
 
 I'm always interested in collaborating on:
 - **Data for Good** projects with social impact
@@ -509,23 +510,7 @@ Feel free to reach out if you have an interesting problem to solve!
 
 ---
 
-## ⭐ If You Like This Portfolio
-
-If you found my work interesting or useful:
-- ⭐ **Star this repository**
-- 🔗 **Share it** with others who might benefit
-- 💬 **Reach out** to discuss data science, econometrics, or potential opportunities
-- 🤝 **Connect** with me on LinkedIn
-
----
-
-## 📜 License
-
-This portfolio is for educational and demonstration purposes. Individual project data and code are subject to their respective licenses.
-
----
-
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **CUNY Faculty:** For excellent instruction and guidance throughout my Master's program
 - **Capstone Advisor:** Professor George Hagstrom for guidance on econometric methodology
@@ -537,7 +522,7 @@ This portfolio is for educational and demonstration purposes. Individual project
 
 <div align="center">
 
-### 🚀 Ready to Solve Data Problems Together?
+### Ready to Solve Data Problems Together?
 
 **Let's connect and discuss how data science can drive your business forward!**
 
@@ -547,8 +532,6 @@ This portfolio is for educational and demonstration purposes. Individual project
 
 ---
 
-**⭐ Thanks for visiting! Happy exploring! ⭐**
-
-*Last Updated: December 2024*
+*Last Updated: December 2025*
 
 </div>
