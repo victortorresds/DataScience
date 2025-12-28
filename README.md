@@ -454,12 +454,6 @@ I'm actively seeking **Data Science** and **Data Analyst** opportunities where I
 
 ---
 
-## GitHub Stats
-
-![Victor's GitHub Stats](https://github-readme-stats.vercel.app/api?username=victortorresds&show_icons=true&theme=default)
-
----
-
 ## Repository Structure
 
 ```
