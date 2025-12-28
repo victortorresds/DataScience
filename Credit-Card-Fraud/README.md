@@ -1,4 +1,4 @@
-# 💳 Credit Card Fraud Detection
+# Credit Card Fraud Detection
 
 *Machine learning classification to identify fraudulent credit card transactions using Python and Scikit-learn*
 
@@ -8,7 +8,7 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 - [Project Overview](#-project-overview)
 - [Business Problem](#-business-problem)
 - [Data Source](#-data-source)
@@ -24,7 +24,7 @@
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
 Credit card fraud detection is a critical challenge for financial institutions, with billions of dollars lost annually to fraudulent transactions. This project applies **machine learning classification algorithms** to identify fraudulent credit card transactions in highly imbalanced data, achieving **80-85% fraud detection rate** with **<1% false positive rate**.
 
@@ -37,7 +37,7 @@ Credit card fraud detection is a critical challenge for financial institutions, 
 
 ---
 
-## 💼 Business Problem
+## Business Problem
 
 ### The Fraud Detection Challenge
 
@@ -57,7 +57,7 @@ Credit card fraud detection is a critical challenge for financial institutions, 
 
 ---
 
-## 📊 Data Source
+## Data Source
 
 ### Credit Card Fraud Detection Dataset
 
@@ -86,7 +86,7 @@ Credit card fraud detection is a critical challenge for financial institutions, 
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Credit-Card-Fraud/
@@ -120,7 +120,7 @@ Credit-Card-Fraud/
 
 ---
 
-## 🔬 Methodology
+## Methodology
 
 ### 1. Exploratory Data Analysis
 
@@ -223,7 +223,7 @@ X_train_balanced, y_train_balanced = smote.fit_resample(X_train, y_train)
 
 ---
 
-## 📈 Model Performance
+## Model Performance
 
 ### Expected Performance Results
 
@@ -268,7 +268,7 @@ X_train_balanced, y_train_balanced = smote.fit_resample(X_train, y_train)
 
 ---
 
-## 🔍 Key Findings
+## Key Findings
 
 ### 1. Class Imbalance is Extreme
 
@@ -322,7 +322,7 @@ X_train_balanced, y_train_balanced = smote.fit_resample(X_train, y_train)
 
 ---
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - **Language:** Python 3.8+
 - **Core Libraries:**
@@ -337,7 +337,7 @@ X_train_balanced, y_train_balanced = smote.fit_resample(X_train, y_train)
 
 ---
 
-## 💻 Installation & Usage
+## Installation & Usage
 
 ### Prerequisites
 
@@ -403,7 +403,7 @@ python src/visualization.py
 
 ---
 
-## 💡 Business Recommendations
+## Business Recommendations
 
 ### Immediate Actions
 
@@ -465,7 +465,7 @@ python src/visualization.py
 
 ---
 
-## 🚀 Future Improvements
+## Future Improvements
 
 - [ ] **Deep Learning Models:** LSTM, CNN, Autoencoders
 - [ ] **Additional Features:** Transaction velocity, geographic data, merchant risk
@@ -478,10 +478,10 @@ python src/visualization.py
 
 ---
 
-## 📫 Contact
+## Contact
 
 **Victor Torres**  
-Master's in Data Science, CUNY (Expected: December 2025)
+Master's in Data Science, CUNY (December 2025)
 
 - **LinkedIn:** [linkedin.com/in/vitugo](https://www.linkedin.com/in/vitugo)
 - **GitHub:** [@victortorresds](https://github.com/victortorresds)
@@ -489,7 +489,7 @@ Master's in Data Science, CUNY (Expected: December 2025)
 
 ---
 
-## 📚 References
+## References
 
 **Dataset:**
 - Machine Learning Group - ULB. (2018). Credit Card Fraud Detection. Kaggle. https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
@@ -503,13 +503,7 @@ Master's in Data Science, CUNY (Expected: December 2025)
 
 ---
 
-## 📄 License
-
-This project is for educational and portfolio purposes.
-
----
-
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **Kaggle & ULB Machine Learning Group** - For providing the dataset
 - **Scikit-learn Community** - For excellent ML tools
@@ -518,7 +512,7 @@ This project is for educational and portfolio purposes.
 
 ---
 
-## 📊 Project Metrics
+## Project Metrics
 
 **Analysis Scale:**
 - **Transactions Analyzed:** 284,807
@@ -543,4 +537,3 @@ This project is for educational and portfolio purposes.
 
 *This project demonstrates advanced proficiency in handling imbalanced data, applying multiple ML algorithms, optimizing for business metrics, and providing actionable recommendations - critical skills for data science roles in finance, fraud prevention, and risk management.*
 
-**⭐ If you found this analysis valuable, please consider giving it a star!**
