@@ -1,443 +1,258 @@
-# Data Science Portfolio
+# Hi, I'm Victor Torres
 
-**Victor Torres**  
-*Master's in Data Science, CUNY (Expected: December 2025)*
+**Data Scientist | Master's Student @ CUNY | Turning Data Into Impact**
 
-Welcome to my data science portfolio! This repository showcases a diverse collection of end-to-end projects demonstrating proficiency in machine learning, statistical analysis, data visualization, and business intelligence.
+<div align="center">
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://www.linkedin.com/in/vitugo)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-black)](https://github.com/victortorresds)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/vitugo)
+[![Portfolio](https://img.shields.io/badge/Portfolio-View_Projects-success?style=for-the-badge&logo=github&logoColor=white)](https://github.com/victortorresds/DataScience)
+[![Capstone](https://img.shields.io/badge/Capstone-Tariff_Analysis-red?style=for-the-badge&logo=github&logoColor=white)](https://github.com/victortorresds/Tariff-Analysis)
+
+</div>
 
 ---
 
 ## About Me
 
-I'm a Master's student in Data Science at CUNY, passionate about transforming data into actionable insights that drive business decisions and social impact. With a background spanning both software development and data science, I combine technical expertise with strong business acumen.
+I'm a **Master's student in Data Science at CUNY** (graduating December 2025), passionate about transforming complex data into actionable insights that drive business decisions and social impact.
 
-**Background:**
--  **Master's in Data Science** - CUNY (Graduating December 2025)
--  **Google Data Analytics Certification** - Coursera
--  **Full Stack Development** - IBM Certification
--  **Technical Skills:** Python, R, SQL, Java, C#
-
-**What Drives Me:**
-I'm fascinated by uncovering meaningful patterns in data that can improve business outcomes and contribute to social good. Whether it's predicting customer churn, optimizing manufacturing processes, or analyzing food insecurity, I approach each problem with curiosity and rigor.
+- **Focus Areas:** Predictive Modeling, Econometrics, Causal Inference, Business Analytics
+- **Mission:** Solving real-world problems with data-driven solutions
+- **Background:** Software Development + Trucking Industry + Data Science = Unique perspective
+- **Currently Learning:** Deep Learning, NLP, MLOps
 
 ---
 
-## Technical Skills
+## Featured Capstone Project
 
-### Programming Languages
-![Python](https://img.shields.io/badge/Python-Expert-blue?logo=python)
-![R](https://img.shields.io/badge/R-Expert-blue?logo=r)
-![SQL](https://img.shields.io/badge/SQL-Proficient-green?logo=postgresql)
-![Java](https://img.shields.io/badge/Java-Proficient-green?logo=java)
-![C#](https://img.shields.io/badge/C%23-Proficient-green?logo=csharp)
+### [Impact of US Tariffs on Transportation Equipment Imports](https://github.com/victortorresds/Tariff-Analysis)
 
-### Data Science & ML
-- **Python Libraries:** Pandas, NumPy, Scikit-Learn, TensorFlow, Matplotlib, Seaborn, Plotly
-- **R Packages:** Tidyverse, ggplot2, caret, randomForest, arules, fpp3, forecast
-- **Machine Learning:** Classification, Regression, Time Series, Clustering, Association Rules
-- **Deep Learning:** Neural Networks, CNNs (introductory)
+**Master's Capstone Project | Econometric Analysis | December 2024**
 
-### Frameworks & Tools
-- **Development:** Spring, Django, .NET
-- **Visualization:** Tableau, Power BI, ggplot2, Seaborn, Plotly
-- **Data Handling:** Jupyter, RStudio, VS Code, Excel
-- **Version Control:** Git, GitHub
-- **Databases:** PostgreSQL, MySQL, SQLite
+<table>
+<tr>
+<td width="60%">
 
-### Analytics Techniques
-- Predictive Modeling
-- Time Series Forecasting
-- Statistical Hypothesis Testing
-- A/B Testing
-- Feature Engineering
-- Model Selection & Validation
-- Data Wrangling & Cleaning
-- Exploratory Data Analysis (EDA)
+**Research Highlights:**
+- **Rigorous Causal Inference:** Difference-in-Differences methodology
+- **Major Economic Impact:** -$10B/month (-25%) in Chinese imports
+- **Trade Diversion:** Mexico +30%, Canada +10%
+- **Industry Insights:** 2 years trucking experience informed analysis
+- **Academic Rigor:** 55-page research paper + defense presentation
 
----
+**Methodology:**
+- Natural experiment design with multiple control groups
+- 524 observations (131 months × 4 countries)
+- Validated with product-level Census data
+- R² = 0.847-0.891 across 5 model specifications
 
-## Featured Projects
+</td>
+<td width="40%">
 
-### [ABC Beverage pH Prediction](./ABC_Beverage)
-**Predictive modeling for manufacturing quality control**
+**Key Findings:**
 
-![Status](https://img.shields.io/badge/Status-Completed-success)
-![Tech](https://img.shields.io/badge/Tech-R%20|%20Machine%20Learning-blue)
+```
+Section 301 Impact:
+  -25% Chinese imports
+  [$10B/month decline]
 
-Developed predictive models to forecast beverage pH levels in manufacturing, enabling real-time quality control and regulatory compliance.
+Trade Diversion:
+  Mexico: +30%
+  Canada: +10%
 
-**Key Achievements:**
-- Compared 10 different models (Linear & Non-linear)
-- Random Forest achieved **RMSE: 0.61, R²: 0.64** (best performance)
-- Identified **Manufacturing Flow** as primary pH driver (54.42 importance score)
-- Projected **$700K+ annual savings** through batch rejection reduction
+Industry Effects:
+  Border states: +$68K/year
+  West Coast: -15% freight
+  Equipment: +22-28% costs
+```
 
-**Technical Highlights:**
-- MICE imputation for missing data (8-30 variables)
-- Feature engineering with square root transformations
-- Cross-validation and hyperparameter tuning
-- Feature importance analysis for process optimization
+**Tech Stack:**
+- R (econometrics)
+- Quarto (publishing)
+- DiD methodology
+- FRED & Census data
 
-**Business Impact:** Real-time pH prediction system reducing batch rejections by 50% and testing costs by $150K-200K annually.
+</td>
+</tr>
+</table>
 
-**[Explore Project →](./ABC_Beverage)**
+**[Read Full Paper →](https://github.com/victortorresds/Tariff-Analysis)** | **[View Presentation →](https://github.com/victortorresds/Tariff-Analysis/blob/main/presentation/presentation.pdf)**
 
 ---
 
-### Time Series Forecasting: Financial & Energy Applications](./Time-Series-Forecasting)
-**Dual forecasting analysis of ATM cash demand and residential power consumption**
+## Data Science Portfolio
 
-![Status](https://img.shields.io/badge/Status-Completed-success)
-![Tech](https://img.shields.io/badge/Tech-R%20|%20Time%20Series-blue)
+### [**→ View My Complete Portfolio**](https://github.com/victortorresds/DataScience)
 
-Applied advanced time series techniques to predict ATM cash withdrawals and residential electricity demand, optimizing resource allocation for financial and energy sectors.
+**6 End-to-End Projects | $3M+ Projected Business Value**
 
-**Key Achievements:**
-- **Part A:** Forecasted daily cash for 4 ATM machines (May 2010)
-- **Part B:** Predicted monthly residential power consumption (2014)
-- Tested ARIMA, ETS, NAIVE, SNAIVE, MEAN, RW models
-- ETS model achieved **MAPE: 3.2%** for power forecasting
+<table>
+<tr>
+<td width="50%">
 
-**Technical Highlights:**
-- STL decomposition for seasonality analysis
-- Box-Cox transformation for variance stabilization
-- Multiple model comparison with RMSE, MAE, MAPE
-- Weekly and seasonal pattern identification
+### Manufacturing Analytics
+**ABC Beverage pH Prediction**
+- 10 models compared
+- Random Forest: R² = 0.64
+- $700K+ annual savings
+- [Explore →](https://github.com/victortorresds/DataScience/tree/main/ABC_Beverage)
 
-**Business Impact:** Optimized cash replenishment schedules saving $40K-60K per ATM annually; improved power generation planning reducing costs by $500K-1M.
+</td>
+<td width="50%">
 
-**[Explore Project →](./Time-Series-Forecasting)**
+### Time Series Forecasting
+**ATM Cash & Power Demand**
+- ARIMA, ETS, STL models
+- MAPE: 3.2%
+- $500K-1M cost savings
+- [Explore →](https://github.com/victortorresds/DataScience/tree/main/ATM-Power-Forecasting)
 
----
+</td>
+</tr>
+<tr>
+<td width="50%">
 
-### [Market Basket Analysis: Grocery Purchase Patterns](./MB_Analysis)
-**Association rule mining and network analysis for retail optimization**
+### Retail Analytics
+**Market Basket Analysis**
+- 10K transactions analyzed
+- 15 association rules mined
+- 12-18% basket size increase
+- [Explore →](https://github.com/victortorresds/DataScience/tree/main/MB_Analysis)
 
-![Status](https://img.shields.io/badge/Status-Completed-success)
-![Tech](https://img.shields.io/badge/Tech-R%20|%20Data%20Mining-blue)
+</td>
+<td width="50%">
 
-Analyzed 10,000 grocery transactions to uncover product associations and shopping patterns, providing data-driven recommendations for store layout and promotional strategies.
+### Customer Analytics
+**Telco Churn Prediction**
+- Neural Networks
+- AUC-ROC: 0.85
+- $2-3M retention savings
+- [Explore →](https://github.com/victortorresds/DataScience/tree/main/telco_customer_churn)
 
-**Key Achievements:**
-- Mined **15 high-confidence association rules** (Lift: 2.0-3.0)
-- Identified **whole milk** and **other vegetables** as anchor products
-- Discovered **25 natural product communities** using Louvain clustering
-- **Ready soups** identified as unexpected bridge product (high betweenness centrality)
+</td>
+</tr>
+</table>
 
-**Technical Highlights:**
-- Apriori algorithm for association rules
-- Network analysis with degree and betweenness centrality
-- Community detection for product clustering
-- Multiple visualization approaches (igraph, visNetwork)
-
-**Business Impact:** Data-driven store layout optimization projected to increase basket size by 12-18% and improve cross-selling by 15-20%.
-
-**[Explore Project →](./MB_Analysis)**
-
----
-
-### [Telco Customer Churn Analysis](./telco_customer_churn)
-**Machine learning classification to predict customer attrition**
-
-![Status](https://img.shields.io/badge/Status-Completed-success)
-![Tech](https://img.shields.io/badge/Tech-R%20|%20Classification-blue)
-
-Built classification models to identify customers at risk of churning, enabling proactive retention strategies for telecom companies.
-
-**Key Achievements:**
-- Compared Logistic Regression vs. Neural Network models
-- Neural Network: **AUC-ROC: 0.851, Accuracy: 79.8%**
-- Identified **contract type** and **tenure** as top churn predictors
-- Month-to-month contracts show **42% churn** vs. 11% for long-term
-
-**Technical Highlights:**
-- Exploratory data analysis on 7,043 customers
-- Feature engineering and encoding
-- ROC curve analysis and threshold optimization
-- Model comparison and selection
-
-**Business Impact:** Targeted retention campaigns projected to reduce churn by 10-15%, saving $2-3M annually in acquisition costs.
-
-**[Explore Project →](./telco_customer_churn)**
+**[See All Projects in Detail →](https://github.com/victortorresds/DataScience)**
 
 ---
 
-### [Gun Control Effectiveness Analysis](./Gun_Control_Analysis)
-**Statistical analysis of gun law strictness vs. mortality rates**
+## Technical Stack
 
-![Status](https://img.shields.io/badge/Status-Completed-success)
-![Tech](https://img.shields.io/badge/Tech-R%20|%20Statistical%20Analysis-blue)
-
-Investigated the relationship between state gun law strictness and firearm mortality rates using CDC data and web-scraped gun law grades.
-
-**Key Achievements:**
-- **Strong negative correlation (r = -0.67)** between law strictness and mortality
-- States with **A-grade laws** have **3-5x lower** mortality than F-grade states
-- Web scraped gun law data from Giffords Law Center
-- Accessed CDC mortality data via API
-
-**Technical Highlights:**
-- Web scraping with `rvest`
-- API data retrieval with `httr`
-- Linear regression and correlation analysis
-- Data visualization with state-by-state comparisons
-
-**Policy Implications:** Data supports evidence-based gun legislation as effective public health intervention; each 1-point increase in law strictness associated with 4.2 fewer deaths per 100K.
-
-**[Explore Project →](./Gun_Control_Analysis)**
-
----
-
-### [Food Security and Poverty in the United States](./FS_Analysis)
-**Large-scale analysis of child food insecurity across America**
-
-![Status](https://img.shields.io/badge/Status-Completed-success)
-![Tech](https://img.shields.io/badge/Tech-Python%20|%20Social%20Impact-blue)
-
-Analyzed 126,832 individuals from CPS Food Security Supplement data to examine child food insecurity patterns and correlation with poverty levels.
-
-**Key Achievements:**
-- Processed **126,832 records** with **508 variables**
-- Found **strong negative correlation** between income and food insecurity
-- Identified geographic clustering (Southern states higher insecurity)
-- Created compelling "elevator pitch" visualizations for policymakers
-
-**Technical Highlights:**
-- Large-scale data processing with Pandas
-- Geographic analysis with GeoPandas
-- Statistical correlation analysis
-- Data storytelling for policy advocacy
-
-**Social Impact:** Findings inform policy recommendations for SNAP expansion, school nutrition programs, and state-targeted interventions to address food insecurity affecting millions of children.
-
-**[Explore Project →](./FS_Analysis)**
-
----
-
-## Project Summary Matrix
-
-| Project | Domain | Techniques | Key Metric | Business Value |
-|---------|--------|------------|------------|----------------|
-| **ABC Beverage pH** | Manufacturing | Regression, Random Forest, Feature Engineering | R² = 0.64 | $700K+ savings |
-| **Time Series Forecasting** | Finance, Energy | ARIMA, ETS, Seasonality Analysis | MAPE = 3.2% | $500K-1M savings |
-| **Market Basket Analysis** | Retail | Association Rules, Network Analysis | 15 Rules, Lift 2-3 | 12-18% basket ↑ |
-| **Telco Churn** | Telecom | Classification, Neural Networks | AUC = 0.85 | $2-3M savings |
-| **Gun Control** | Public Policy | Statistical Analysis, Web Scraping | r = -0.67 | Policy insights |
-| **Food Security** | Social Impact | Large Data, Geographic Analysis | 126K records | Policy recommendations |
-
----
-
-## What Makes This Portfolio Stand Out
-
-### Diversity of Applications
-- **6 different domains:** Manufacturing, Finance, Energy, Retail, Telecom, Public Health/Policy
-- **Real-world problems:** Each project addresses actual business or social challenges
-- **Measurable impact:** Quantified business value and ROI for each project
-
-### Technical Breadth
-- **Supervised Learning:** Classification (Logistic, Neural Networks) and Regression (Linear, Random Forest, SVM)
-- **Unsupervised Learning:** Clustering (Louvain), Association Rules (Apriori)
-- **Time Series:** ARIMA, ETS, STL Decomposition, Forecasting
-- **Data Engineering:** Missing data imputation (MICE), feature engineering, web scraping
-- **Statistical Analysis:** Hypothesis testing, correlation analysis, regression
-
-### Business Acumen
-- **ROI Quantification:** Every project includes estimated business impact in dollars
-- **Actionable Recommendations:** Specific, implementable strategies for each analysis
-- **Stakeholder Communication:** Technical and non-technical reporting
-- **Domain Knowledge:** Understanding of industry-specific challenges and metrics
-
-### Data Science Lifecycle
-- **Data Collection:** APIs, web scraping, databases
-- **Data Cleaning:** Missing values, outliers, transformations
-- **EDA:** Visualization, statistical summaries, pattern discovery
-- **Modeling:** Algorithm selection, training, validation, comparison
-- **Deployment:** Predictions, monitoring recommendations, business integration
-
----
-
-## Highlighted Skills by Project
-
-### Programming & Tools
-| Skill | Projects |
-|-------|----------|
-| **Python** | Food Security Analysis |
-| **R** | ABC Beverage, Time Series, Market Basket, Telco Churn, Gun Control |
-| **SQL** | Data extraction and manipulation across projects |
-| **Web Scraping** | Gun Control Analysis (`rvest`, `httr`) |
-| **API Integration** | Gun Control (CDC API), Time Series (data retrieval) |
-
-### Machine Learning Algorithms
-| Algorithm | Projects |
-|-----------|----------|
-| **Random Forest** | ABC Beverage (Winner: R²=0.64) |
-| **Neural Networks** | Telco Churn (AUC=0.85) |
-| **ARIMA/ETS** | Time Series Forecasting (MAPE=3.2%) |
-| **Logistic Regression** | Telco Churn, Gun Control |
-| **SVM, KNN, MARS** | ABC Beverage (model comparison) |
-| **Apriori** | Market Basket Analysis (15 rules) |
-
-### Statistical Methods
-| Method | Projects |
-|--------|----------|
-| **Linear Regression** | Gun Control, ABC Beverage |
-| **Correlation Analysis** | Food Security, Gun Control |
-| **Time Series Decomposition** | Time Series Forecasting (STL) |
-| **MICE Imputation** | ABC Beverage (handling 8.2% missing data) |
-| **Cross-Validation** | ABC Beverage (10-fold CV) |
-
-### Data Visualization
-| Tool/Package | Projects |
-|--------------|----------|
-| **ggplot2** | All R projects |
-| **Plotly** | Market Basket, Time Series (interactive) |
-| **Matplotlib/Seaborn** | Food Security |
-| **igraph** | Market Basket (network viz) |
-| **GeoPandas** | Food Security (geographic mapping) |
-
----
-
-## Key Accomplishments
-
-### Academic Excellence
--  Master's in Data Science (Expected Dec 2025)
--  Google Data Analytics Certification
--  IBM Full Stack Development Certification
--  Comprehensive project portfolio spanning multiple domains
-
-### Technical Achievements
--  Deployed 6 end-to-end data science projects
--  Compared 40+ machine learning models across projects
--  Processed datasets ranging from 2,571 to 126,832 records
--  Achieved measurable business impact in every project
-
-### Business Impact
--  **$3M+ in projected annual value** across all projects
--  **Quantified ROI** for each analysis (425% for ABC Beverage)
--  **Actionable recommendations** implemented or implementable
--  **Data-driven decision making** enabled in multiple industries
-
----
-
-## Education
-
-**Master of Science in Data Science**  
-City University of New York (CUNY)  
-*Expected Graduation: December 2025*
-
-**Relevant Coursework:**
-- DATA 624: Predictive Analytics
-- DATA 608: Knowledge and Visual Analytics  
-- DATA 621: Business Analytics and Data Mining
-- Statistical Methods
-- Machine Learning
-- Data Visualization
-
-**Certifications:**
-- Google Data Analytics Professional Certificate (Coursera)
-- IBM Full Stack Software Developer Professional Certificate
-
----
-
-## Let's Connect!
-
-I'm actively seeking **Data Science** and **Data Analyst** opportunities where I can apply my analytical skills to solve real-world problems and drive business value.
-
-**Contact Information:**
--  **LinkedIn:** [linkedin.com/in/vitugo](https://www.linkedin.com/in/vitugo)
--  **GitHub:** [@victortorresds](https://github.com/victortorresds)
--  **Portfolio:** You're here! Explore the projects above
-
-**What I'm Looking For:**
-- Data Science roles in tech, finance, healthcare, or social impact
-- Opportunities to work with complex datasets and machine learning
-- Collaborative teams that value data-driven decision making
-- Companies committed to continuous learning and innovation
-
-**Open to:**
-- Full-time positions (available from December 2025)
-- Internships or contract work
-- Collaboration on interesting data projects
-- Coffee chats about data science and analytics
-
----
-
-## Current Focus
-
-**Learning:**
-- Deep Learning and Neural Networks (TensorFlow, PyTorch)
-- Natural Language Processing (NLP)
-- Cloud platforms (AWS, GCP) for ML deployment
-- Advanced time series methods (Prophet, LSTM)
-
-**Building:**
-- Additional projects in NLP and computer vision
-- Interactive dashboards with Tableau and Plotly Dash
-- End-to-end ML pipelines with deployment
-
-**Exploring:**
-- Real-time data streaming and analytics
-- MLOps and model monitoring
-- A/B testing frameworks
-- Causal inference methods
+```python
+skills = {
+    "languages": ["Python", "R", "SQL", "Java", "C#"],
+    "data_science": ["Pandas", "NumPy", "Scikit-Learn", "TensorFlow"],
+    "statistics": ["Econometrics", "Causal Inference", "DiD", "Time Series"],
+    "visualization": ["Matplotlib", "Seaborn", "Plotly", "Tableau", "ggplot2"],
+    "ml_algorithms": ["Random Forest", "Neural Networks", "ARIMA", "SVM", "Clustering"],
+    "tools": ["Jupyter", "RStudio", "Quarto", "Git", "VS Code"],
+    "specialties": ["Predictive Modeling", "Policy Analysis", "Feature Engineering", "A/B Testing"]
+}
+```
 
 ---
 
 ## GitHub Stats
 
-![Victor's GitHub Stats](https://github-readme-stats.vercel.app/api?username=victortorresds&show_icons=true&theme=default)
+<div align="center">
+
+![Victor's GitHub Stats](https://github-readme-stats.vercel.app/api?username=victortorresds&show_icons=true&theme=default&hide_border=true&include_all_commits=true&count_private=true)
+
+![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=victortorresds&layout=compact&theme=default&hide_border=true)
+
+</div>
 
 ---
 
-## 🗂️ Repository Structure
+## What I Bring to the Table
+
+- **Research Rigor:** Master's-level econometric analysis with causal inference
+- **Business Impact Focus:** Every project quantifies ROI and business value
+- **Real-World Experience:** 2 years trucking industry + software development
+- **Technical Versatility:** Supervised, unsupervised, time series, and causal methods
+- **Clear Communication:** Academic papers + technical reports + executive summaries
+- **Domain Diversity:** Manufacturing, Finance, Retail, Telecom, Trade Policy, Public Health
+
+---
+
+## 'm Looking For
+
+**Data Science** or **Data Analyst** roles where I can:
+- Apply ML and econometrics to solve real business problems
+- Conduct rigorous causal analysis for policy or business decisions
+- Work with cross-functional teams
+- Create measurable business impact
+
+**Available:** December 2025  
+**Open to:** Full-time, Contract, Internships
+
+**Particularly interested in:**
+- Trade & supply chain analytics
+- Economic policy analysis
+- Transportation & logistics optimization
+- Manufacturing quality control
+
+---
+
+## Education & Certifications
+
+**Master of Science in Data Science** - CUNY (Dec 2025)
+**Bachelors on Information Technology** - SNHU   
+**Capstone:** Econometric analysis of US tariff policy impacts  
+**Google Data Analytics Certificate** - Coursera  
+**IBM Full Stack Developer Certificate**
+
+---
+
+## Let's Connect!
+
+I'm always open to discussing:
+- Data science and econometric methodologies
+- Research collaboration opportunities
+- Job opportunities in data science/analytics/policy analysis
+- Coffee chats about data, trade policy, or tech
+
+**Reach out:**
+- [LinkedIn](https://www.linkedin.com/in/vitugo) - Best way to reach me!
+- [Portfolio](https://github.com/victortorresds/DataScience) - See my projects
+- [Capstone](https://github.com/victortorresds/Tariff-Analysis) - Read my research
+- [GitHub](https://github.com/victortorresds) - You're already here!
+
+---
+
+## 🌟 Quick Highlights
 
 ```
-DataScience/
-│
-├── ABC_Beverage/                    # pH Prediction project
-├── Time-Series-Forecasting/         # ATM & Power forecasting
-├── MB_Analysis/                     # Market Basket Analysis
-├── telco_customer_churn/            # Customer churn prediction
-├── Gun_Control_Analysis/            # Gun law effectiveness study
-├── FS_Analysis/                     # Food security analysis
-│
-├── DataScience-Portfolio-Structure/ # Project templates
-│   ├── PROJECT-TEMPLATE/            # Standard project structure
-│   └── SETUP_GUIDE.md              # Portfolio setup instructions
-│
-└── README.md                        # This file!
+Master's Capstone: Econometric Tariff Analysis
+7 Complete Data Science Projects
+$3M+ in Projected Business Value  
+Expertise in Python, R, SQL, Econometrics
+Up to 126,832 Records Analyzed
+Causal Inference + Machine Learning
+MS Data Science (Dec 2025)
 ```
-
----
-
-## Philosophy
-
-> "Data science is not just about algorithms and models—it's about asking the right questions, telling compelling stories with data, and creating actionable insights that drive real-world impact."
-
-I approach every project with:
-- **Curiosity:** What patterns exist in this data?
-- **Rigor:** Are my methods sound and reproducible?
-- **Impact:** How will this analysis create value?
-- **Communication:** Can stakeholders understand and act on my findings?
-
----
 
 ---
 
 <div align="center">
 
-### Ready to Solve Data Problems Together?
+### **Want to see my work in action?**
 
-**Let's connect and discuss how data science can drive your business forward!**
+## **[Read My Capstone Research →](https://github.com/victortorresds/Tariff-Analysis)**
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Let's_Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/vitugo)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow_Me-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/victortorresds)
+## **[Explore My Data Science Portfolio →](https://github.com/victortorresds/DataScience)**
+
+*Featuring rigorous research, detailed projects, code, visualizations, and business impact analysis*
 
 ---
 
-*Last Updated: November 2025*
+**Thanks for stopping by! Let's turn data into decisions together!**
 
 </div>
+
+---
+
+<sub> **Capstone Highlight:** My Master's thesis analyzed $10B/month in trade flow changes using difference-in-differences methodology, combining 2 years of trucking industry experience with rigorous econometric analysis.</sub>
+
+<sub> **Portfolio Highlight:** Check out my [DataScience repository](https://github.com/victortorresds/DataScience) for 6 additional end-to-end projects with comprehensive documentation and measurable business impact.</sub>
