@@ -13,11 +13,11 @@ Welcome to my data science portfolio! This repository showcases a diverse collec
 
 ## About Me
 
-I'm a Master's student in Data Science at CUNY, passionate about transforming data into actionable insights that drive business decisions and social impact. With a unique background spanning software development, trucking industry operations, and data science, I combine technical expertise with real-world business understanding.
+I'm a Master's graduate in Data Science at CUNY, passionate about transforming data into actionable insights that drive business decisions and social impact. With a unique background spanning software development, trucking industry operations, and data science, I combine technical expertise with real-world business understanding.
 
 **Background:**
-- **Master's in Data Science** - CUNY (Graduating December 2025)
-- **Industry Experience** - 2 years as trucking owner-operator
+- **Master's in Data Science** - CUNY (December 2025)
+- **Industry Experience** - 2 years experience in logistics as a Data Analyst
 - **Google Data Analytics Certification** - Coursera
 - **Full Stack Development** - IBM Certification
 - **Technical Skills:** Python, R, SQL, Java, C#
